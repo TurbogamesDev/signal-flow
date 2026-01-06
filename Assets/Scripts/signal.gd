@@ -25,4 +25,27 @@ func toggleSignal():
 	else:
 		polygon2D.color = Color(1, 0, 0, 1)
 
+func _on_area_entered(area: Area2D) -> void:
+	if area is not TrainSignal:
+		return
+	assert(area is TrainSignal)
+
+	if self.get_instance_id() > area.get_instance_id():
+		return
+
+	self.monitorable = false
+	self.monitoring = false
+	self.input_pickable = false
+
+	self.hide()
+
+	var on_other_signal_aspect_change = func(other_signal_proceed: bool):
+		print("new signal: %s" % str(other_signal_proceed))
+
+		proceed = other_signal_proceed
+
+		changed.emit(proceed)
+
+	area.changed.connect(on_other_signal_aspect_change)
+
 
