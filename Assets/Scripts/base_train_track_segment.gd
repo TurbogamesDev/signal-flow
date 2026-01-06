@@ -7,7 +7,7 @@ class_name BaseTrainTrackSegment
 
 @export var trainTrackPieces: Array[TrainTrackPiece]
 
-@export var trainsInTrack: Array[Train]
+var trainsInTrack: Array[Train]
 
 const HIDDEN_Z_INDEX = -10
 const SHOWN_Z_INDEX = 0

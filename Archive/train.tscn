@@ -1,7 +1,0 @@
-[gd_scene format=3 uid="uid://bcgmwfrflgg0h"]
-
-[node name="Train" type="Node2D"]
-
-[node name="Polygon2D" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-64, -32, 64, -32, 64, 32, -64, 32)
-uv = PackedVector2Array(-64, -32, 64, -32, 64, 32, -64, 32)
