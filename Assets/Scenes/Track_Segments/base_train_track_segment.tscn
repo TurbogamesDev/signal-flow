@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhmfp1h05agj4"]
+
+[ext_resource type="Script" uid="uid://bel4dmy3tkex6" path="res://Assets/Scripts/base_train_track_segment.gd" id="1_3ld2c"]
+
+[node name="BaseTrainTrackSegment" type="Node2D"]
+script = ExtResource("1_3ld2c")
+
+[node name="TrainTrackPieces" type="Node2D" parent="."]
+
+[node name="Signals" type="Node2D" parent="."]

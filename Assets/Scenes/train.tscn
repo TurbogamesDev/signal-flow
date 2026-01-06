@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://d0swi8sb81sqg"]
+
+[ext_resource type="Script" uid="uid://cltdkojxrv0tu" path="res://Assets/Scripts/train.gd" id="1_a6kih"]
+
+[node name="Train" type="Node2D"]
+script = ExtResource("1_a6kih")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-32, -24, -56, 0, -32, 24, 32, 24, 56, 0, 32, -24)
+
+[node name="CollisionDetector" type="Area2D" parent="."]
+collision_mask = 4
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CollisionDetector"]
+polygon = PackedVector2Array(-32, 24, 32, 24, 56, 0, 32, -24, -32, -24, -56, 0)
+
+[connection signal="area_entered" from="CollisionDetector" to="." method="_on_collision_detector_area_entered"]

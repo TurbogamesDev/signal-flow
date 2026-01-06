@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://jks56xlsixau"]
+
+[ext_resource type="Script" uid="uid://bq1b68tx66icq" path="res://Assets/Scripts/base_switching_train_track_segment.gd" id="1_om4ka"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_om4ka"]
+size = Vector2(194, 193)
+
+[node name="BaseSwitchingTrainTrackSegment" type="Node2D" node_paths=PackedStringArray("trainTrackSegments")]
+script = ExtResource("1_om4ka")
+trainTrackSegments = [null, null]
+
+[node name="ToggleSelection" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToggleSelection"]
+position = Vector2(95, 95.5)
+shape = SubResource("RectangleShape2D_om4ka")
+
+[node name="TrainTrackSegments" type="Node2D" parent="."]
+
+[connection signal="input_event" from="ToggleSelection" to="." method="_on_toggle_selection_input_event"]

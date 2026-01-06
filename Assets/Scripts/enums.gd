@@ -1,0 +1,13 @@
+extends Node
+class_name Enums
+
+enum TrainDirection {
+    NORTH_FOLLOWING,
+    SOUTH_FOLLOWING,
+    EAST_FOLLOWING,
+    WEST_FOLLOWING,
+    NORTH_OPPOSING,
+    SOUTH_OPPOSING,
+    EAST_OPPOSING,
+    WEST_OPPOSING
+}

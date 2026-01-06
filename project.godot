@@ -1,0 +1,27 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Signal Flow"
+run/main_scene="uid://fdrxtvto2fgg"
+config/features=PackedStringArray("4.5", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+enums="*res://Assets/Scripts/enums.gd"
+
+[layer_names]
+
+2d_physics/layer_1="train"
+2d_physics/layer_2="signal"
+2d_physics/layer_3="signal_sensor"
+2d_physics/layer_4="switching_track"

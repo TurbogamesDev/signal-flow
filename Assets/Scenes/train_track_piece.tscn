@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://4iylqgc4sm16"]
+
+[ext_resource type="Script" uid="uid://cqorrb5yy8vl1" path="res://Assets/Scripts/train_track_piece.gd" id="1_mohwo"]
+[ext_resource type="Script" uid="uid://2f8j5l84eel3" path="res://Assets/Scripts/signal_sensor.gd" id="2_g0v68"]
+
+[sub_resource type="Gradient" id="Gradient_mohwo"]
+colors = PackedColorArray(0.51367754, 0.99999994, 0.48175043, 1, 1, 0.48000002, 0.48000002, 1)
+
+[sub_resource type="Curve2D" id="Curve2D_mohwo"]
+resource_local_to_scene = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mohwo"]
+size = Vector2(8, 16)
+
+[node name="TrainTrackPiece" type="Line2D" node_paths=PackedStringArray("pathFollow2D", "remoteTransform2D", "path2D")]
+points = PackedVector2Array(0, 0, 192, 0)
+width = 16.0
+gradient = SubResource("Gradient_mohwo")
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_mohwo")
+pathFollow2D = NodePath("Path2D/PathFollow2D")
+remoteTransform2D = NodePath("Path2D/PathFollow2D/RemoteTransform2D")
+path2D = NodePath("Path2D")
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_mohwo")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Path2D/PathFollow2D"]
+
+[node name="SignalSensor" type="Area2D" parent="." node_paths=PackedStringArray("trainTrackPiece")]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("2_g0v68")
+trainTrackPiece = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SignalSensor"]
+position = Vector2(180, 0)
+shape = SubResource("RectangleShape2D_mohwo")

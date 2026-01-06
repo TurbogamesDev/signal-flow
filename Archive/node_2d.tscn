@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://diqyoe6gm1gl7"]
+
+[ext_resource type="PackedScene" uid="uid://btndnbuq02sui" path="res://Archive/train_track.tscn" id="1_0e48y"]
+[ext_resource type="PackedScene" uid="uid://c7d30itepoxqy" path="res://Archive/train_a.tscn" id="2_epypp"]
+[ext_resource type="PackedScene" uid="uid://cg6l515ks6ml1" path="res://Archive/switching_track.tscn" id="3_epypp"]
+[ext_resource type="PackedScene" uid="uid://bd54lagrdbynd" path="res://Assets/Scenes/signal.tscn" id="4_0hol4"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(336, 144)
+
+[node name="TrainTrack" parent="." node_paths=PackedStringArray("nextTrainTrack", "trainSignal") instance=ExtResource("1_0e48y")]
+position = Vector2(194.2279, 109.24696)
+points = PackedVector2Array(-2.2279053, 18.753036, 253.7721, 18.753036)
+nextTrainTrack = NodePath("../TrainTrack2")
+trainSignal = NodePath("../Signal")
+
+[node name="Train" parent="." node_paths=PackedStringArray("currentTrainTrack") instance=ExtResource("2_epypp")]
+position = Vector2(112, 128)
+currentTrainTrack = NodePath("../TrainTrack")
+
+[node name="TrainTrack2" parent="." instance=ExtResource("1_0e48y")]
+position = Vector2(448, 109)
+points = PackedVector2Array(0, 19, 192, 211)
+
+[node name="SwitchingTrack" parent="." instance=ExtResource("3_epypp")]
+position = Vector2(185, 272)
+
+[node name="Signal" parent="." instance=ExtResource("4_0hol4")]
+position = Vector2(440, 80)

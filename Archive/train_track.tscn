@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://btndnbuq02sui"]
+
+[ext_resource type="Script" uid="uid://qif0rxbc7x60" path="res://Archive/train_track.gd" id="1_8lwvm"]
+
+[sub_resource type="Curve2D" id="Curve2D_8x1ks"]
+resource_local_to_scene = true
+
+[node name="TrainTrack" type="Line2D" node_paths=PackedStringArray("pathFollow2D", "remoteTransform2D", "path2D")]
+points = PackedVector2Array(0, 0, 256, 0)
+width = 16.0
+script = ExtResource("1_8lwvm")
+pathFollow2D = NodePath("Path2D/PathFollow2D")
+remoteTransform2D = NodePath("Path2D/PathFollow2D/RemoteTransform2D")
+path2D = NodePath("Path2D")
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_8x1ks")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Path2D/PathFollow2D"]
