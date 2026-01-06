@@ -10,7 +10,7 @@ var currentTween: Tween
 
 var lastSignalSensor: SignalSensor
 
-const SPEED_PIXELS_PER_SECOND = 64
+const SPEED_PIXELS_PER_SECOND = 96
 
 func _ready() -> void:
 	currentTrainTrackSegment.trainsInTrack.append(self)
