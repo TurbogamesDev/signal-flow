@@ -4,11 +4,15 @@
 [ext_resource type="PackedScene" uid="uid://4iylqgc4sm16" path="res://Assets/Scenes/train_track_piece.tscn" id="2_37dpn"]
 [ext_resource type="PackedScene" uid="uid://bd54lagrdbynd" path="res://Assets/Scenes/signal.tscn" id="3_rp3ui"]
 
-[node name="NorthToSouth_TrainTrackSegment" node_paths=PackedStringArray("entryDirectionToTrainTrackPieceMap", "trainTrackPieces") instance=ExtResource("1_w7yt7")]
+[node name="NorthToSouth_TrainTrackSegment" node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap", "trainTrackPieces") instance=ExtResource("1_w7yt7")]
 directionMap = Dictionary[int, int]({
 0: 0,
 1: 1
 })
+exitDirectionToNextTrainTrackSegmentMap = {
+0: null,
+1: null
+}
 entryDirectionToTrainTrackPieceMap = {
 0: NodePath("TrainTrackPieces/TrainTrackPiece_1"),
 1: NodePath("TrainTrackPieces/TrainTrackPiece_2")

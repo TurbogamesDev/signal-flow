@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://cesm7sakpbvy4"]
+
+[ext_resource type="PackedScene" uid="uid://jks56xlsixau" path="res://Assets/Scenes/Track_Segments/base_switching_train_track_segment.tscn" id="1_goimt"]
+[ext_resource type="PackedScene" uid="uid://uof2mkd5iamg" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Straight_Track_Segments/east_to_west_train_track_segment.tscn" id="2_ixchc"]
+[ext_resource type="PackedScene" uid="uid://d0ys0kgu8rnk5" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Curved_Track_Segments/south_to_west_train_track_segment.tscn" id="3_goimt"]
+
+[node name="EastToWest_and_SouthToWest_SwitchingTrainTrackSegment" node_paths=PackedStringArray("trainTrackSegments", "exitDirectionToNextTrainTrackSegmentMap") instance=ExtResource("1_goimt")]
+trainTrackSegments = [NodePath("TrainTrackSegments/EastToWest_TrainTrackSegment"), NodePath("TrainTrackSegments/SouthToWest_TrainTrackSegment")]
+exitDirectionToNextTrainTrackSegmentMap = {
+1: null,
+2: null,
+3: null
+}
+
+[node name="EastToWest_TrainTrackSegment" parent="TrainTrackSegments" index="0" node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("2_ixchc")]
+exitDirectionToNextTrainTrackSegmentMap = {
+2: null,
+3: null
+}
+entryDirectionToTrainTrackPieceMap = {
+2: NodePath("TrainTrackPieces/TrainTrackPiece_1"),
+3: NodePath("TrainTrackPieces/TrainTrackPiece")
+}
+
+[node name="SouthToWest_TrainTrackSegment" parent="TrainTrackSegments" index="1" node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("3_goimt")]
+exitDirectionToNextTrainTrackSegmentMap = {
+0: null,
+1: null,
+2: null,
+3: null
+}
+entryDirectionToTrainTrackPieceMap = {
+0: NodePath("TrainTrackPieces/TrainTrackPiece_1"),
+2: NodePath("TrainTrackPieces/TrainTrackPiece_2")
+}
