@@ -2,6 +2,7 @@ extends Area2D
 class_name TrainSignal
 
 @export var polygon2D: Polygon2D
+@export var direction: Enums.TrainDirection
 var proceed = false
 
 signal changed(proceed: bool)
@@ -32,6 +33,10 @@ func _on_area_entered(area: Area2D) -> void:
 
 	if self.get_instance_id() > area.get_instance_id():
 		return
+
+	self.set_deferred("monitorable", false)
+	self.set_deferred("monitoring", false)
+	self.set_deferred("input_pickable", false)
 
 	self.monitorable = false
 	self.monitoring = false

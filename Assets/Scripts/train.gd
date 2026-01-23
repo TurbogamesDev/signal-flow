@@ -62,26 +62,21 @@ func changeToNextTrainTrackSegment() -> bool:
 
 	return true
 
-func _on_collision_detector_area_entered(area: Area2D) -> void:
-	print("area2d detected")
-	print(area)
-
-	if area is not SignalSensor:
+func handleSignalSensor(signalSensor: SignalSensor) -> void:
+	if signalSensor == lastSignalSensor:
 		return
 
-	if area == lastSignalSensor:
-		return
-
-	var train_track_piece: TrainTrackPiece = area.trainTrackPiece
+	var train_track_piece: TrainTrackPiece = signalSensor.trainTrackPiece
 
 	if train_track_piece != currentTrainTrackPiece:
 		return
 	
-	lastSignalSensor = area
+	lastSignalSensor = signalSensor
 
 	var train_signal: TrainSignal = train_track_piece.trainSignal
 
-	print(train_signal.proceed)
+	if train_signal.direction != currentDirection:
+		return
 
 	if train_signal.proceed:
 		return
@@ -93,3 +88,13 @@ func _on_collision_detector_area_entered(area: Area2D) -> void:
 
 	if currentTween:
 		currentTween.play()
+
+func _on_collision_detector_area_entered(area: Area2D) -> void:
+	print("area2d detected")
+	print(area)
+
+	if area is not SignalSensor:
+		return
+
+	handleSignalSensor(area)
+	
