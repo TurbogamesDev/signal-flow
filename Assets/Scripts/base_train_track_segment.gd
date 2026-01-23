@@ -12,7 +12,7 @@ var trainsInTrack: Array[Train]
 const HIDDEN_Z_INDEX = -10
 const SHOWN_Z_INDEX = 0
 
-const HIDDEN_ALPHA_VALUE = 0.5
+const HIDDEN_ALPHA_VALUE = 0.2
 
 func hideSegment():
     for train_track_piece in trainTrackPieces:

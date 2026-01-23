@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://2f8j5l84eel3" path="res://Assets/Scripts/signal_sensor.gd" id="2_g0v68"]
 
 [sub_resource type="Gradient" id="Gradient_mohwo"]
-colors = PackedColorArray(0.51367754, 0.99999994, 0.48175043, 1, 1, 0.48000002, 0.48000002, 1)
+colors = PackedColorArray(0.51367754, 0.99999994, 0.48175043, 1, 1, 0.48000002, 0.48000002, 0.33333334)
 
 [sub_resource type="Curve2D" id="Curve2D_mohwo"]
 resource_local_to_scene = true
