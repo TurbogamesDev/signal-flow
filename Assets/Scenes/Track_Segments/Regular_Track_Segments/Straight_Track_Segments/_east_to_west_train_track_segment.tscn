@@ -16,9 +16,9 @@ exitDirectionToNextTrainTrackSegmentMap = {
 }
 entryDirectionToTrainTrackPieceMap = {
 2: NodePath("TrainTrackPieces/TrainTrackPiece_1"),
-3: NodePath("TrainTrackPieces/TrainTrackPiece")
+3: NodePath("TrainTrackPieces/TrainTrackPiece_2")
 }
-trainTrackPieces = [NodePath("TrainTrackPieces/TrainTrackPiece_1"), NodePath("TrainTrackPieces/TrainTrackPiece")]
+trainTrackPieces = [NodePath("TrainTrackPieces/TrainTrackPiece_1"), NodePath("TrainTrackPieces/TrainTrackPiece_2")]
 
 [node name="TrainTrackPieces" type="Node2D" parent="."]
 
@@ -26,7 +26,7 @@ trainTrackPieces = [NodePath("TrainTrackPieces/TrainTrackPiece_1"), NodePath("Tr
 position = Vector2(0, 64)
 trainSignal = NodePath("../../Signals/Signal_1")
 
-[node name="TrainTrackPiece" parent="TrainTrackPieces" node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_nx516")]
+[node name="TrainTrackPiece_2" parent="TrainTrackPieces" node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_nx516")]
 position = Vector2(192, 128)
 rotation = -3.1415925
 trainSignal = NodePath("../../Signals/Signal_2")
