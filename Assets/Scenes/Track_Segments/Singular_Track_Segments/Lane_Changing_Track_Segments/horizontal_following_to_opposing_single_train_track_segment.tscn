@@ -20,13 +20,14 @@ entryDirectionToTrainTrackPieceMap = {
 trainTrackPieces = [NodePath("TrainTrackPieces/TrainTrackPiece_1"), NodePath("TrainTrackPieces/TrainTrackPiece_2")]
 
 [node name="TrainTrackPiece_1" parent="TrainTrackPieces" index="0" node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_553sy")]
-points = PackedVector2Array(0, 0, 64, 0, 128, 64, 192, 64)
+position = Vector2(0, 64)
+points = PackedVector2Array(0, -64, 64, -64, 128, 0, 192, 0)
 trainSignal = NodePath("../../Signals/Signal_1")
 
 [node name="TrainTrackPiece_2" parent="TrainTrackPieces" index="1" node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_553sy")]
-position = Vector2(192, 64)
+position = Vector2(192, 0)
 rotation = -3.1415927
-points = PackedVector2Array(0, 0, 64, 0, 128, 64, 192, 64)
+points = PackedVector2Array(1.5258789e-05, -64, 64.00001, -64, 128, 7.6293945e-06, 192, 1.5258789e-05)
 trainSignal = NodePath("../../Signals/Signal_2")
 
 [node name="Signal_1" parent="Signals" index="0" instance=ExtResource("3_cdjh3")]
