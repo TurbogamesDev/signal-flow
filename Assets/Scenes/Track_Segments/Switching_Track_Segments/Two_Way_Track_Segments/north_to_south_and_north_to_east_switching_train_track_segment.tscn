@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://baemw4xaftwpw"]
 
 [ext_resource type="PackedScene" uid="uid://jks56xlsixau" path="res://Assets/Scenes/Track_Segments/base_switching_train_track_segment.tscn" id="1_nhf12"]
-[ext_resource type="PackedScene" uid="uid://tyj41evmy1c6" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Straight_Track_Segments/_north_to_south_train_track_segment.tscn" id="2_nhf12"]
-[ext_resource type="PackedScene" uid="uid://cn4ir14rwfmv7" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Curved_Track_Segments/_north_to_east_train_track_segment.tscn" id="3_46h7w"]
+[ext_resource type="PackedScene" uid="uid://tyj41evmy1c6" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Straight_Track_Segments/north_to_south_train_track_segment.tscn" id="2_nhf12"]
+[ext_resource type="PackedScene" uid="uid://cn4ir14rwfmv7" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Curved_Track_Segments/north_to_east_train_track_segment.tscn" id="3_46h7w"]
 
 [node name="NorthToSouth_and_NorthToEast_SwitchingTrainTrackSegment" node_paths=PackedStringArray("trainTrackSegments", "exitDirectionToNextTrainTrackSegmentMap") instance=ExtResource("1_nhf12")]
 trainTrackSegments = [NodePath("TrainTrackSegments/NorthToSouth_TrainTrackSegment"), NodePath("TrainTrackSegments/NorthToEast_TrainTrackSegment")]

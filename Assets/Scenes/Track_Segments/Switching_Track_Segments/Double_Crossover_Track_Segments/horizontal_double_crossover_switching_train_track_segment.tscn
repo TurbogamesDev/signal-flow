@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://d10b6gac1yc5p"]
 
 [ext_resource type="PackedScene" uid="uid://jks56xlsixau" path="res://Assets/Scenes/Track_Segments/base_switching_train_track_segment.tscn" id="1_iwhk6"]
-[ext_resource type="PackedScene" uid="uid://uof2mkd5iamg" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Straight_Track_Segments/_east_to_west_train_track_segment.tscn" id="2_upy3m"]
+[ext_resource type="PackedScene" uid="uid://uof2mkd5iamg" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Straight_Track_Segments/east_to_west_train_track_segment.tscn" id="2_upy3m"]
 [ext_resource type="PackedScene" uid="uid://cm2i36frehr82" path="res://Assets/Scenes/Track_Segments/Singular_Track_Segments/Lane_Changing_Track_Segments/horizontal_following_to_opposing_single_train_track_segment.tscn" id="3_clyim"]
 [ext_resource type="PackedScene" uid="uid://bap3qogtv2foq" path="res://Assets/Scenes/Track_Segments/Singular_Track_Segments/Lane_Changing_Track_Segments/horizontal_opposing_to_following_single_train_track_segment.tscn" id="4_y14x6"]
 

@@ -31,6 +31,9 @@ trainSignal = NodePath("../../Signals/Signal_2")
 
 [node name="Signal_1" parent="Signals" index="0" instance=ExtResource("3_jpuam")]
 position = Vector2(176, -24)
+direction = 2
 
 [node name="Signal_2" parent="Signals" index="1" instance=ExtResource("3_jpuam")]
 position = Vector2(16, 88)
+rotation = -3.1415927
+direction = 3

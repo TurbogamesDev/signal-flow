@@ -32,6 +32,9 @@ trainSignal = NodePath("../../Signals/Signal_2")
 
 [node name="Signal_1" parent="Signals" index="0" instance=ExtResource("3_owi6o")]
 position = Vector2(176, 40)
+direction = 2
 
 [node name="Signal_2" parent="Signals" index="1" instance=ExtResource("3_owi6o")]
 position = Vector2(152, 176)
+rotation = 1.5707964
+direction = 1
