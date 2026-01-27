@@ -4,20 +4,24 @@
 [ext_resource type="PackedScene" uid="uid://4iylqgc4sm16" path="res://Assets/Scenes/train_track_piece.tscn" id="2_q3b7x"]
 [ext_resource type="PackedScene" uid="uid://bd54lagrdbynd" path="res://Assets/Scenes/signal.tscn" id="3_2eosk"]
 
-[node name="Horizontal_OpposingToFollowing_SingleTrainTrackSegment" node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap", "trainTrackPieces") instance=ExtResource("1_0jye5")]
+[node name="Vertical_OpposingToFollowing_SingleTrainTrackSegment" node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap", "trainTrackPieces") instance=ExtResource("1_0jye5")]
 directionMap = Dictionary[int, int]({
-6: 2,
-7: 3
+4: 0,
+5: 1
 })
 exitDirectionToNextTrainTrackSegmentMap = {
-2: null,
-3: null
+0: null,
+1: null
 }
 entryDirectionToTrainTrackPieceMap = {
-6: NodePath("TrainTrackPieces/TrainTrackPiece_1"),
-7: NodePath("TrainTrackPieces/TrainTrackPiece_2")
+4: NodePath("TrainTrackPieces/TrainTrackPiece_1"),
+5: NodePath("TrainTrackPieces/TrainTrackPiece_2")
 }
 trainTrackPieces = [NodePath("TrainTrackPieces/TrainTrackPiece_1"), NodePath("TrainTrackPieces/TrainTrackPiece_2")]
+
+[node name="TrainTrackPieces" parent="." index="0"]
+position = Vector2(0, 192)
+rotation = -1.5707964
 
 [node name="TrainTrackPiece_1" parent="TrainTrackPieces" index="0" node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_q3b7x")]
 points = PackedVector2Array(0, 64, 64, 64, 128, 0, 192, 0)
@@ -29,11 +33,14 @@ rotation = -3.1415927
 points = PackedVector2Array(0, 64, 64, 64.00001, 128, 7.6293945e-06, 192, 1.5258789e-05)
 trainSignal = NodePath("../../Signals/Signal_2")
 
+[node name="Signals" parent="." index="1"]
+position = Vector2(0, 192)
+rotation = -1.5707964
+
 [node name="Signal_1" parent="Signals" index="0" instance=ExtResource("3_2eosk")]
 position = Vector2(176, -24)
-direction = 2
 
 [node name="Signal_2" parent="Signals" index="1" instance=ExtResource("3_2eosk")]
 position = Vector2(16, 88)
 rotation = -3.1415927
-direction = 3
+direction = 1
