@@ -12,17 +12,18 @@ var trainsInTrack: Array[Train]
 const HIDDEN_Z_INDEX = -10
 const SHOWN_Z_INDEX = 0
 
-const HIDDEN_ALPHA_VALUE = 0.2
+const SHOWN_COLOR: Color = Color(1, 1, 1) 
+const HIDDEN_COLOR: Color = Color(0.5, 0.5, 0.5)
 
 func hideSegment():
     for train_track_piece in trainTrackPieces:
-        train_track_piece.default_color.a = HIDDEN_ALPHA_VALUE
+        train_track_piece.default_color = HIDDEN_COLOR
 
         train_track_piece.z_index = HIDDEN_Z_INDEX
 
 func showSegment():
     for train_track_piece in trainTrackPieces:
-        train_track_piece.default_color.a = 1
+        train_track_piece.default_color = SHOWN_COLOR
 
         train_track_piece.z_index = SHOWN_Z_INDEX
 
