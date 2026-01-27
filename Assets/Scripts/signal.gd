@@ -38,10 +38,6 @@ func _on_area_entered(area: Area2D) -> void:
 	self.set_deferred("monitoring", false)
 	self.set_deferred("input_pickable", false)
 
-	self.monitorable = false
-	self.monitoring = false
-	self.input_pickable = false
-
 	self.hide()
 
 	var on_other_signal_aspect_change = func(other_signal_proceed: bool):
