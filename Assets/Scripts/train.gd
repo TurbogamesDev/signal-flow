@@ -18,6 +18,8 @@ func _ready() -> void:
 	currentTrainTrackPiece = currentTrainTrackSegment.entryDirectionToTrainTrackPieceMap.get(currentDirection)
 
 	while true:
+		currentDirection = currentTrainTrackSegment.directionMap.get(currentDirection)
+
 		await followCurrentTrainTrackPiece()
 		
 		var successful = changeToNextTrainTrackSegment()
@@ -28,8 +30,6 @@ func _ready() -> void:
 			break
 
 func followCurrentTrainTrackPiece():
-	print("following train track %s of %s" % [currentTrainTrackPiece.name, currentTrainTrackSegment.name])
-
 	currentTrainTrackPiece.connectTrain(self)
 
 	var length_of_track_piece = currentTrainTrackPiece.getTotalLength()
@@ -44,10 +44,6 @@ func followCurrentTrainTrackPiece():
 	currentTrainTrackPiece.pathFollow2D.progress_ratio = 0
 
 func changeToNextTrainTrackSegment() -> bool:
-	print("changing train track")
-
-	currentDirection = currentTrainTrackSegment.directionMap.get(currentDirection)
-
 	currentTrainTrackSegment.trainsInTrack.erase(self)
 
 	var nextTrainTrackSegment = currentTrainTrackSegment.exitDirectionToNextTrainTrackSegmentMap.get(currentDirection)
