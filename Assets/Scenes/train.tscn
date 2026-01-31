@@ -6,9 +6,12 @@
 script = ExtResource("1_a6kih")
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
+z_index = 10
+z_as_relative = false
 polygon = PackedVector2Array(-32, -24, -56, 0, -32, 24, 32, 24, 56, 0, 32, -24)
 
 [node name="CollisionDetector" type="Area2D" parent="."]
+z_as_relative = false
 collision_mask = 4
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CollisionDetector"]
