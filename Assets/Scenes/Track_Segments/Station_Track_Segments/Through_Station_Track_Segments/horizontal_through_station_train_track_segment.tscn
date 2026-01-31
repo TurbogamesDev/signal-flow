@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://dkhthe5boqoq0"]
+
+[ext_resource type="PackedScene" uid="uid://e7q1mm6odlp2" path="res://Assets/Scenes/Track_Segments/_base_station_train_track_segment.tscn" id="1_1jxjo"]
+
+[node name="Horizontal_Through_StationTrainTrackSegment" instance=ExtResource("1_1jxjo")]

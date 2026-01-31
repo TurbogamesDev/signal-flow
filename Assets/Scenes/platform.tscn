@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://d4bh4lct5v62s"]
+
+[node name="Platform" type="Node2D"]
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+position = Vector2(-104, -32)
+color = Color(0.5729883, 0.5729883, 0.5729883, 1)
+polygon = PackedVector2Array(8, 8, 8, 56, 200, 56, 200, 8)
