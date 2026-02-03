@@ -10,40 +10,87 @@ var currentTween: Tween
 
 var lastSignalSensor: SignalSensor
 
-const SPEED_PIXELS_PER_SECOND = 96
+@export var maxSpeed: float
+
+const ACCELERATION_CONSTANT_PX_S2: float = 24.0
+const DECELERATION_CONSTANT_PX_S2: float = -384.0
+
+var currentAcceleration_Px_S2: float = 0.0
+var currentSpeed_Px_S: float = 0.0
 
 func _ready() -> void:
 	currentTrainTrackSegment.trainsInTrack.append(self)
 
 	currentTrainTrackPiece = currentTrainTrackSegment.entryDirectionToTrainTrackPieceMap.get(currentDirection)
-
-	while true:
-		currentDirection = currentTrainTrackSegment.directionMap.get(currentDirection)
-
-		await followCurrentTrainTrackPiece()
-		
-		var successful = changeToNextTrainTrackSegment()
-
-		# print(successful)
-
-		if not successful:
-			break
-
-func followCurrentTrainTrackPiece():
 	currentTrainTrackPiece.connectTrain(self)
 
-	var length_of_track_piece = currentTrainTrackPiece.getTotalLength()
+	currentDirection = currentTrainTrackSegment.directionMap.get(currentDirection)
+
+	currentAcceleration_Px_S2 = ACCELERATION_CONSTANT_PX_S2
+
+
+func updateSpeed(delta: float):
+	currentSpeed_Px_S += currentAcceleration_Px_S2 * delta
+
+	if currentSpeed_Px_S > maxSpeed:
+		currentAcceleration_Px_S2 = 0
+
+		currentSpeed_Px_S = maxSpeed
+
+	if currentSpeed_Px_S < 0.0:
+		currentAcceleration_Px_S2 = 0
+
+		currentSpeed_Px_S = 0.0
+
+func updatePosition(delta: float) -> bool:
+	if delta > 0.1:
+		delta = 0.1
 	
-	currentTween = get_tree().create_tween()
-	currentTween.tween_property(currentTrainTrackPiece.pathFollow2D, "progress_ratio", 1.0, length_of_track_piece / SPEED_PIXELS_PER_SECOND)
+	print(delta)
+	print(currentSpeed_Px_S)
 
-	await currentTween.finished
+	var pixels_left_to_cover = currentSpeed_Px_S * delta
 
-	currentTrainTrackPiece.disconnectTrain()
+	var length_of_first_track_piece = currentTrainTrackPiece.getTotalLength()
+	var remaining_length_of_first_track_piece = length_of_first_track_piece - currentTrainTrackPiece.pathFollow2D.progress
 
-	currentTrainTrackPiece.pathFollow2D.progress_ratio = 0
+	if remaining_length_of_first_track_piece > pixels_left_to_cover:
+		moveByProgressPxOfPathFollow2D(pixels_left_to_cover)
+
+		print("moving by %f" % pixels_left_to_cover)
+
+	else:
+		moveByProgressPxOfPathFollow2D(remaining_length_of_first_track_piece)
+
+		pixels_left_to_cover -= remaining_length_of_first_track_piece
+
+		var successful = changeToNextTrainTrackSegment()
+
+		if not successful:
+			return false
+
+		moveByProgressPxOfPathFollow2D(pixels_left_to_cover)
+
+	return true
+
+		
+
+func moveByProgressPxOfPathFollow2D(progress_px: float):
+	var path_follow_2d = currentTrainTrackPiece.pathFollow2D
+
+	path_follow_2d.progress += progress_px
+
+func _process(delta: float) -> void:
+	updateSpeed(delta)
+
+	updatePosition(delta)
+	
 
 func changeToNextTrainTrackSegment() -> bool:
+	currentTrainTrackPiece.disconnectTrain()
+
+	currentTrainTrackPiece.pathFollow2D.progress = 0.0
+
 	currentTrainTrackSegment.trainsInTrack.erase(self)
 
 	var nextTrainTrackSegment = currentTrainTrackSegment.exitDirectionToNextTrainTrackSegmentMap.get(currentDirection)
@@ -55,6 +102,10 @@ func changeToNextTrainTrackSegment() -> bool:
 	currentTrainTrackPiece = currentTrainTrackSegment.entryDirectionToTrainTrackPieceMap.get(currentDirection)
 
 	currentTrainTrackSegment.trainsInTrack.append(self)
+
+	currentTrainTrackPiece.connectTrain(self)
+
+	currentDirection = currentTrainTrackSegment.directionMap.get(currentDirection)
 
 	return true
 
@@ -77,13 +128,11 @@ func handleSignalSensor(signalSensor: SignalSensor) -> void:
 	if train_signal.proceed:
 		return
 
-	if currentTween:
-		currentTween.pause()
+	currentAcceleration_Px_S2 = DECELERATION_CONSTANT_PX_S2
 
 	await train_signal.changed
 
-	if currentTween:
-		currentTween.play()
+	currentAcceleration_Px_S2 = ACCELERATION_CONSTANT_PX_S2
 
 func _on_collision_detector_area_entered(area: Area2D) -> void:
 	print("area2d detected")

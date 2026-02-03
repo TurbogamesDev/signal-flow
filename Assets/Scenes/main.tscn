@@ -21,10 +21,12 @@ position = Vector2(0, 16)
 position = Vector2(-432, 0)
 currentTrainTrackSegment = NodePath("../2_NorthToSouth_TrainTrackSegment")
 currentDirection = 1
+maxSpeed = 96.0
 
 [node name="Train2" parent="." node_paths=PackedStringArray("currentTrainTrackSegment") instance=ExtResource("2_qplxx")]
 position = Vector2(400, -8)
 currentTrainTrackSegment = NodePath("../2_NorthToSouth_TrainTrackSegment")
+maxSpeed = 96.0
 
 [node name="SouthToEast_TrainTrackSegment" parent="." node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("7_f8o6k")]
 position = Vector2(-288, -280)
