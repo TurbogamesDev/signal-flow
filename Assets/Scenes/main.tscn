@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://fdrxtvto2fgg"]
+[gd_scene load_steps=12 format=3 uid="uid://fdrxtvto2fgg"]
 
 [ext_resource type="PackedScene" uid="uid://d0swi8sb81sqg" path="res://Assets/Scenes/train.tscn" id="2_qplxx"]
 [ext_resource type="PackedScene" uid="uid://cesm7sakpbvy4" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Two_Way_Track_Segments/east_to_west_and_south_to_west_switching_train_track_segment.tscn" id="4_guoxd"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://3phhcmc23hhn" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Two_Way_Track_Segments/east_to_west_and_north_to_east_switching_train_track_segment.tscn" id="8_f8o6k"]
 [ext_resource type="PackedScene" uid="uid://bgasxr7evrcb6" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Double_Crossover_Track_Segments/vertical_double_crossover_switching_train_track_segment.tscn" id="9_4357x"]
 [ext_resource type="PackedScene" uid="uid://dkhthe5boqoq0" path="res://Assets/Scenes/Track_Segments/Station_Track_Segments/Through_Station_Track_Segments/horizontal_through_station_train_track_segment.tscn" id="10_f1jyc"]
+[ext_resource type="PackedScene" uid="uid://84re2pj1xwqo" path="res://Assets/Scenes/Track_Segments/Station_Track_Segments/Through_Station_Track_Segments/vertical_through_station_train_track_segment.tscn" id="11_vlji8"]
 
 [node name="Main" type="Node2D"]
 
@@ -28,7 +29,7 @@ currentTrainTrackSegment = NodePath("../2_NorthToSouth_TrainTrackSegment")
 [node name="SouthToEast_TrainTrackSegment" parent="." node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("7_f8o6k")]
 position = Vector2(-288, -280)
 exitDirectionToNextTrainTrackSegmentMap = {
-1: NodePath("../1_NorthToSouth_TrainTrackSegment2"),
+1: NodePath("../Vertical_Through_StationTrainTrackSegment"),
 2: NodePath("../EastToWest_and_SouthToWest_SwitchingTrainTrackSegment")
 }
 entryDirectionToTrainTrackPieceMap = {
@@ -77,17 +78,6 @@ exitDirectionToNextTrainTrackSegmentMap = {
 3: NodePath("../SouthToEast_TrainTrackSegment")
 }
 
-[node name="1_NorthToSouth_TrainTrackSegment2" parent="." node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("4_rvsrt")]
-position = Vector2(-288, -88)
-exitDirectionToNextTrainTrackSegmentMap = {
-0: NodePath("../SouthToEast_TrainTrackSegment"),
-1: NodePath("../NorthToSouth_and_NorthToEast_SwitchingTrainTrackSegment")
-}
-entryDirectionToTrainTrackPieceMap = {
-0: NodePath("TrainTrackPieces/TrainTrackPiece_1"),
-1: NodePath("TrainTrackPieces/TrainTrackPiece_2")
-}
-
 [node name="2_Horizontal_DoubleCrossover_SwitchingTrainTrackSegment" parent="." node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap") instance=ExtResource("8_4357x")]
 position = Vector2(288, 104)
 exitDirectionToNextTrainTrackSegmentMap = {
@@ -108,7 +98,7 @@ exitDirectionToNextTrainTrackSegmentMap = {
 [node name="NorthToSouth_and_NorthToEast_SwitchingTrainTrackSegment" parent="." node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap") instance=ExtResource("8_f1jyc")]
 position = Vector2(-288, 104)
 exitDirectionToNextTrainTrackSegmentMap = {
-0: null,
+0: NodePath("../Vertical_Through_StationTrainTrackSegment"),
 1: NodePath("../1_Vertical_DoubleCrossover_SwitchingTrainTrackSegment"),
 2: null
 }
@@ -140,4 +130,11 @@ position = Vector2(96, 104)
 exitDirectionToNextTrainTrackSegmentMap = {
 2: NodePath("../2_Horizontal_DoubleCrossover_SwitchingTrainTrackSegment"),
 3: NodePath("../EastToWest_and_NorthToEast_SwitchingTrainTrackSegment")
+}
+
+[node name="Vertical_Through_StationTrainTrackSegment" parent="." node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap") instance=ExtResource("11_vlji8")]
+position = Vector2(-288, -88)
+exitDirectionToNextTrainTrackSegmentMap = {
+0: NodePath("../SouthToEast_TrainTrackSegment"),
+1: NodePath("../NorthToSouth_and_NorthToEast_SwitchingTrainTrackSegment")
 }
