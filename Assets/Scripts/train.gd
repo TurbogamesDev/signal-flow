@@ -12,7 +12,7 @@ var lastSignalSensor: SignalSensor
 
 @export var maxSpeed: float
 
-const ACCELERATION_CONSTANT_PX_S2: float = 24.0
+const ACCELERATION_CONSTANT_PX_S2: float = 96.0
 const DECELERATION_CONSTANT_PX_S2: float = -384.0
 
 var currentAcceleration_Px_S2: float = 0.0

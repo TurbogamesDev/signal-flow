@@ -2,10 +2,11 @@
 
 [ext_resource type="Script" uid="uid://b0b1po4shln06" path="res://Assets/Scripts/base_station_train_track_segment.gd" id="1_dl7uo"]
 
-[node name="BaseStationTrainTrackSegment" type="Node2D" node_paths=PackedStringArray("trainTrackSegment")]
+[node name="BaseStationTrainTrackSegment" type="Node2D"]
 script = ExtResource("1_dl7uo")
-trainTrackSegment = NodePath("")
 
 [node name="Platforms" type="Node2D" parent="."]
+
+[node name="PlatformSensors" type="Node2D" parent="."]
 
 [node name="TrainTrackSegment" type="Node2D" parent="."]
