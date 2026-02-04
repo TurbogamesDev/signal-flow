@@ -46,8 +46,8 @@ func updatePosition(delta: float) -> bool:
 	if delta > 0.1:
 		delta = 0.1
 	
-	print(delta)
-	print(currentSpeed_Px_S)
+	# print(delta)
+	# print(currentSpeed_Px_S)
 
 	var pixels_left_to_cover = currentSpeed_Px_S * delta
 
@@ -57,7 +57,7 @@ func updatePosition(delta: float) -> bool:
 	if remaining_length_of_first_track_piece > pixels_left_to_cover:
 		moveByProgressPxOfPathFollow2D(pixels_left_to_cover)
 
-		print("moving by %f" % pixels_left_to_cover)
+		# print("moving by %f" % pixels_left_to_cover)
 
 	else:
 		moveByProgressPxOfPathFollow2D(remaining_length_of_first_track_piece)
@@ -109,19 +109,7 @@ func changeToNextTrainTrackSegment() -> bool:
 
 	return true
 
-func handleSignalSensor(signalSensor: SignalSensor) -> void:
-	if signalSensor == lastSignalSensor:
-		return
-
-	var train_track_piece: TrainTrackPiece = signalSensor.trainTrackPiece
-
-	if train_track_piece != currentTrainTrackPiece:
-		return
-	
-	lastSignalSensor = signalSensor
-
-	var train_signal: TrainSignal = train_track_piece.trainSignal
-
+func handleTrainSignalDetection(train_signal: TrainSignal):
 	if train_signal.direction != currentDirection:
 		return
 
@@ -134,12 +122,31 @@ func handleSignalSensor(signalSensor: SignalSensor) -> void:
 
 	currentAcceleration_Px_S2 = ACCELERATION_CONSTANT_PX_S2
 
-func _on_collision_detector_area_entered(area: Area2D) -> void:
-	print("area2d detected")
-	print(area)
 
-	if area is not SignalSensor:
+func handleSignalSensorDetection(signal_sensor: SignalSensor) -> void:
+	if signal_sensor == lastSignalSensor:
 		return
 
-	handleSignalSensor(area)
+	var train_track_piece: TrainTrackPiece = signal_sensor.trainTrackPiece
+
+	if train_track_piece != currentTrainTrackPiece:
+		return
+	
+	lastSignalSensor = signal_sensor
+
+	var train_signal: TrainSignal = train_track_piece.trainSignal
+
+	handleTrainSignalDetection(train_signal)
+
+func handlePlatformSensorDetection(platform_sensor: PlatformSensor):
+	print("Detected platform sensor!")
+	print(platform_sensor)
+
+func _on_collision_detector_area_entered(area: Area2D) -> void:
+	if area is SignalSensor:
+		handleSignalSensorDetection(area)
+
+	elif area is PlatformSensor:
+		handlePlatformSensorDetection(area)
+
 	
