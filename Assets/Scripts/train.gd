@@ -144,7 +144,7 @@ func handleSignalSensorDetection(signal_sensor: SignalSensor) -> void:
 
 	handleTrainSignalDetection(train_signal)
 
-func handlePlatformSensorDetection(_platform_sensor: PlatformSensor):
+func handleThroughPlatformSensorDetection():
 	currentAcceleration = DECELERATION_CONSTANT
 	
 	polygon2D.color = PLATFORM_COLOR
@@ -160,11 +160,15 @@ func handlePlatformSensorDetection(_platform_sensor: PlatformSensor):
 
 	currentAcceleration = ACCELERATION_CONSTANT
 
+func handlePlatformSensorDetection(platform_sensor: PlatformSensor):
+	if platform_sensor.terminatingPlatform:
+		pass
+	else:
+		handleThroughPlatformSensorDetection()
 
 func _on_collision_detector_area_entered(area: Area2D) -> void:
 	if area is SignalSensor:
 		handleSignalSensorDetection(area)
-
 	elif area is PlatformSensor:
 		handlePlatformSensorDetection(area)
 
