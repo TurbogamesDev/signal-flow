@@ -102,7 +102,7 @@ position = Vector2(-288, 104)
 exitDirectionToNextTrainTrackSegmentMap = {
 0: NodePath("../Vertical_Through_StationTrainTrackSegment"),
 1: NodePath("../1_Vertical_DoubleCrossover_SwitchingTrainTrackSegment"),
-2: null
+2: NodePath("../EastToWest_and_NorthToEast_SwitchingTrainTrackSegment")
 }
 
 [node name="1_Vertical_DoubleCrossover_SwitchingTrainTrackSegment" parent="." node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap") instance=ExtResource("9_4357x")]

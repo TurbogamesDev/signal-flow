@@ -6,17 +6,23 @@ class_name Train
 
 var currentTrainTrackPiece: TrainTrackPiece
 
-var currentTween: Tween
+var currentColourTween
 
 var lastSignalSensor: SignalSensor
 
 @export var maxSpeed: float
+@export var polygon2D: Polygon2D
 
-const ACCELERATION_CONSTANT_PX_S2: float = 96.0
-const DECELERATION_CONSTANT_PX_S2: float = -384.0
+const MOVING_COLOR: Color = Color(1, 1, 1, 1)
+const PLATFORM_COLOR: Color = Color(0.75, 0.75, 0.75, 1)
 
-var currentAcceleration_Px_S2: float = 0.0
-var currentSpeed_Px_S: float = 0.0
+const PLATFORM_WAIT_TIME: float = 15.0
+
+const ACCELERATION_CONSTANT: float = 96.0
+const DECELERATION_CONSTANT: float = -384.0
+
+var currentAcceleration: float = 0.0
+var currentSpeed: float = 0.0
 
 func _ready() -> void:
 	currentTrainTrackSegment.trainsInTrack.append(self)
@@ -26,30 +32,30 @@ func _ready() -> void:
 
 	currentDirection = currentTrainTrackSegment.directionMap.get(currentDirection)
 
-	currentAcceleration_Px_S2 = ACCELERATION_CONSTANT_PX_S2
+	currentAcceleration = ACCELERATION_CONSTANT
 
 
 func updateSpeed(delta: float):
-	currentSpeed_Px_S += currentAcceleration_Px_S2 * delta
+	currentSpeed += currentAcceleration * delta
 
-	if currentSpeed_Px_S > maxSpeed:
-		currentAcceleration_Px_S2 = 0
+	if currentSpeed > maxSpeed:
+		currentAcceleration = 0
 
-		currentSpeed_Px_S = maxSpeed
+		currentSpeed = maxSpeed
 
-	if currentSpeed_Px_S < 0.0:
-		currentAcceleration_Px_S2 = 0
+	if currentSpeed < 0.0:
+		currentAcceleration = 0
 
-		currentSpeed_Px_S = 0.0
+		currentSpeed = 0.0
 
 func updatePosition(delta: float) -> bool:
 	if delta > 0.1:
 		delta = 0.1
 	
 	# print(delta)
-	# print(currentSpeed_Px_S)
+	# print(currentSpeed)
 
-	var pixels_left_to_cover = currentSpeed_Px_S * delta
+	var pixels_left_to_cover = currentSpeed * delta
 
 	var length_of_first_track_piece = currentTrainTrackPiece.getTotalLength()
 	var remaining_length_of_first_track_piece = length_of_first_track_piece - currentTrainTrackPiece.pathFollow2D.progress
@@ -116,11 +122,11 @@ func handleTrainSignalDetection(train_signal: TrainSignal):
 	if train_signal.proceed:
 		return
 
-	currentAcceleration_Px_S2 = DECELERATION_CONSTANT_PX_S2
+	currentAcceleration = DECELERATION_CONSTANT
 
 	await train_signal.changed
 
-	currentAcceleration_Px_S2 = ACCELERATION_CONSTANT_PX_S2
+	currentAcceleration = ACCELERATION_CONSTANT
 
 
 func handleSignalSensorDetection(signal_sensor: SignalSensor) -> void:
@@ -138,9 +144,22 @@ func handleSignalSensorDetection(signal_sensor: SignalSensor) -> void:
 
 	handleTrainSignalDetection(train_signal)
 
-func handlePlatformSensorDetection(platform_sensor: PlatformSensor):
-	print("Detected platform sensor!")
-	print(platform_sensor)
+func handlePlatformSensorDetection(_platform_sensor: PlatformSensor):
+	currentAcceleration = DECELERATION_CONSTANT
+	
+	polygon2D.color = PLATFORM_COLOR
+
+	await get_tree().create_timer(PLATFORM_WAIT_TIME).timeout
+
+	# currentColourTween = get_tree().create_tween() \
+	# 	.tween_property(polygon2D, "color", MOVING_COLOR, 15.0)
+
+	# await currentColourTween.finished
+
+	polygon2D.color = MOVING_COLOR
+
+	currentAcceleration = ACCELERATION_CONSTANT
+
 
 func _on_collision_detector_area_entered(area: Area2D) -> void:
 	if area is SignalSensor:

@@ -26,7 +26,6 @@ position = Vector2(136, 64)
 position = Vector2(56, 128)
 
 [node name="EastToWest_TrainTrackSegment" parent="TrainTrackSegment" index="0" node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("3_1vgsn")]
-z_index = 10
 exitDirectionToNextTrainTrackSegmentMap = {
 2: null,
 3: null
