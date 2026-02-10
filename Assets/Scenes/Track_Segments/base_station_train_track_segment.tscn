@@ -1,12 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://e7q1mm6odlp2"]
+[gd_scene format=3 uid="uid://e7q1mm6odlp2"]
 
 [ext_resource type="Script" uid="uid://b0b1po4shln06" path="res://Assets/Scripts/base_station_train_track_segment.gd" id="1_dl7uo"]
 
-[node name="BaseStationTrainTrackSegment" type="Node2D"]
+[node name="BaseStationTrainTrackSegment" type="Node2D" unique_id=1295532270]
 script = ExtResource("1_dl7uo")
 
-[node name="Platforms" type="Node2D" parent="."]
+[node name="Platforms" type="Node2D" parent="." unique_id=1485539501]
 
-[node name="PlatformSensors" type="Node2D" parent="."]
+[node name="PlatformSensors" type="Node2D" parent="." unique_id=1700686894]
 
-[node name="TrainTrackSegment" type="Node2D" parent="."]
+[node name="TrainTrackSegments" type="Node2D" parent="." unique_id=1330607345]

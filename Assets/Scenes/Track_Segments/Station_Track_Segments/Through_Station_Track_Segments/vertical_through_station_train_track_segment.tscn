@@ -1,35 +1,35 @@
-[gd_scene load_steps=5 format=3 uid="uid://84re2pj1xwqo"]
+[gd_scene format=3 uid="uid://84re2pj1xwqo"]
 
 [ext_resource type="PackedScene" uid="uid://e7q1mm6odlp2" path="res://Assets/Scenes/Track_Segments/base_station_train_track_segment.tscn" id="1_0d6mi"]
 [ext_resource type="PackedScene" uid="uid://d4bh4lct5v62s" path="res://Assets/Scenes/platform.tscn" id="2_c5aqm"]
 [ext_resource type="PackedScene" uid="uid://tyj41evmy1c6" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Straight_Track_Segments/north_to_south_train_track_segment.tscn" id="3_0d6mi"]
 [ext_resource type="PackedScene" uid="uid://c58rvqk1x6r6r" path="res://Assets/Scenes/platform_sensor.tscn" id="3_83afi"]
 
-[node name="Vertical_Through_StationTrainTrackSegment" node_paths=PackedStringArray("trainTrackSegment", "exitDirectionToNextTrainTrackSegmentMap") instance=ExtResource("1_0d6mi")]
-trainTrackSegment = NodePath("TrainTrackSegment/NorthToSouth_TrainTrackSegment")
+[node name="Vertical_Through_StationTrainTrackSegment" unique_id=1578236203 node_paths=PackedStringArray("entryTrainTrackSegment", "exitDirectionToNextTrainTrackSegmentMap") instance=ExtResource("1_0d6mi")]
+entryTrainTrackSegment = NodePath("TrainTrackSegments/NorthToSouth_TrainTrackSegment")
 exitDirectionToNextTrainTrackSegmentMap = {
 0: null,
 1: null
 }
 
-[node name="Platform_1" parent="Platforms" index="0" instance=ExtResource("2_c5aqm")]
+[node name="Platform_1" parent="Platforms" parent_id_path=PackedInt32Array(1485539501) index="0" unique_id=617479038 instance=ExtResource("2_c5aqm")]
 z_as_relative = false
 position = Vector2(168, 96)
 rotation = 1.5707964
 
-[node name="Platform_2" parent="Platforms" index="1" instance=ExtResource("2_c5aqm")]
+[node name="Platform_2" parent="Platforms" parent_id_path=PackedInt32Array(1485539501) index="1" unique_id=436008212 instance=ExtResource("2_c5aqm")]
 position = Vector2(24, 96)
 rotation = 1.5707964
 
-[node name="PlatformSensor_1" parent="PlatformSensors" index="0" instance=ExtResource("3_83afi")]
+[node name="PlatformSensor_1" parent="PlatformSensors" parent_id_path=PackedInt32Array(1700686894) index="0" unique_id=746813683 instance=ExtResource("3_83afi")]
 position = Vector2(128, 136)
 rotation = 1.5707964
 
-[node name="PlatformSensor_2" parent="PlatformSensors" index="1" instance=ExtResource("3_83afi")]
+[node name="PlatformSensor_2" parent="PlatformSensors" parent_id_path=PackedInt32Array(1700686894) index="1" unique_id=532068756 instance=ExtResource("3_83afi")]
 position = Vector2(64, 56)
 rotation = 1.5707964
 
-[node name="NorthToSouth_TrainTrackSegment" parent="TrainTrackSegment" index="0" node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("3_0d6mi")]
+[node name="NorthToSouth_TrainTrackSegment" parent="TrainTrackSegments" parent_id_path=PackedInt32Array(1330607345) index="0" unique_id=918001581 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("3_0d6mi")]
 exitDirectionToNextTrainTrackSegmentMap = {
 0: null,
 1: null

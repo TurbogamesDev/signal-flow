@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://d1xk55ioyrf0s"]
+
+[ext_resource type="PackedScene" uid="uid://e7q1mm6odlp2" path="res://Assets/Scenes/Track_Segments/base_station_train_track_segment.tscn" id="1_2m60q"]
+[ext_resource type="PackedScene" uid="uid://d4bh4lct5v62s" path="res://Assets/Scenes/platform.tscn" id="2_25v5i"]
+[ext_resource type="PackedScene" uid="uid://c58rvqk1x6r6r" path="res://Assets/Scenes/platform_sensor.tscn" id="3_s5ulu"]
+[ext_resource type="PackedScene" uid="uid://uof2mkd5iamg" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Straight_Track_Segments/east_to_west_train_track_segment.tscn" id="4_6efd0"]
+
+[node name="EastEntry_Termination_Station_TrainTrackSegment" node_paths=PackedStringArray("trainTrackSegment", "exitDirectionToNextTrainTrackSegmentMap") instance=ExtResource("1_2m60q")]
+trainTrackSegment = NodePath("TrainTrackSegment/EastToWest_TrainTrackSegment")
+exitDirectionToNextTrainTrackSegmentMap = {
+2: null,
+3: null
+}
+
+[node name="Platform_1" parent="Platforms" index="0" instance=ExtResource("2_25v5i")]
+z_as_relative = false
+position = Vector2(96, 24)
+
+[node name="Platform_2" parent="Platforms" index="1" instance=ExtResource("2_25v5i")]
+position = Vector2(96, 168)
+
+[node name="PlatformSensor_1" parent="PlatformSensors" index="0" instance=ExtResource("3_s5ulu")]
+position = Vector2(136, 64)
+
+[node name="PlatformSensor_2" parent="PlatformSensors" index="1" instance=ExtResource("3_s5ulu")]
+position = Vector2(56, 128)
+
+[node name="EastToWest_TrainTrackSegment" parent="TrainTrackSegment" index="0" node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("4_6efd0")]
+exitDirectionToNextTrainTrackSegmentMap = {
+2: null,
+3: null
+}
+entryDirectionToTrainTrackPieceMap = {
+2: NodePath("TrainTrackPieces/TrainTrackPiece_1"),
+3: NodePath("TrainTrackPieces/TrainTrackPiece_2")
+}
