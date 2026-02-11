@@ -6,8 +6,6 @@ class_name Train
 
 var currentTrainTrackPiece: TrainTrackPiece
 
-var currentColourTween
-
 var lastSignalSensor: SignalSensor
 
 @export var maxSpeed: float
@@ -16,7 +14,7 @@ var lastSignalSensor: SignalSensor
 const MOVING_COLOR: Color = Color(1, 1, 1, 1)
 const PLATFORM_COLOR: Color = Color(0.75, 0.75, 0.75, 1)
 
-const PLATFORM_WAIT_TIME: float = 15.0
+const PLATFORM_WAIT_TIME: float = 3.0
 
 const ACCELERATION_CONSTANT: float = 96.0
 const DECELERATION_CONSTANT: float = -384.0
@@ -107,6 +105,10 @@ func changeToNextTrainTrackSegment() -> bool:
 
 	currentTrainTrackPiece = currentTrainTrackSegment.entryDirectionToTrainTrackPieceMap.get(currentDirection)
 
+	if not currentTrainTrackPiece:
+		print(currentTrainTrackSegment.name)
+		print(currentTrainTrackSegment.entryDirectionToTrainTrackPieceMap)
+
 	currentTrainTrackSegment.trainsInTrack.append(self)
 
 	currentTrainTrackPiece.connectTrain(self)
@@ -162,7 +164,8 @@ func handleThroughPlatformSensorDetection():
 
 func handlePlatformSensorDetection(platform_sensor: PlatformSensor):
 	if platform_sensor.terminatingPlatform:
-		pass
+		# temporary
+		handleThroughPlatformSensorDetection()
 	else:
 		handleThroughPlatformSensorDetection()
 
