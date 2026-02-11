@@ -8,7 +8,7 @@ var proceed = false
 signal changed(proceed: bool)
 
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event is not InputEventMouseButton:
+	if not event.is_action("signal_toggle"):
 		return
 
 	if event.button_index != MOUSE_BUTTON_LEFT or not event.pressed:

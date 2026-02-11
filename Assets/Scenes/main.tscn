@@ -11,11 +11,9 @@
 [ext_resource type="PackedScene" uid="uid://dkhthe5boqoq0" path="res://Assets/Scenes/Track_Segments/Station_Track_Segments/Through_Station_Track_Segments/horizontal_through_station_train_track_segment.tscn" id="10_f1jyc"]
 [ext_resource type="PackedScene" uid="uid://d1xk55ioyrf0s" path="res://Assets/Scenes/Track_Segments/Station_Track_Segments/Terminating_Station_Track_Segments/east_entry_terminating_station_train_track_segment.tscn" id="11_ttgh6"]
 [ext_resource type="PackedScene" uid="uid://84re2pj1xwqo" path="res://Assets/Scenes/Track_Segments/Station_Track_Segments/Through_Station_Track_Segments/vertical_through_station_train_track_segment.tscn" id="11_vlji8"]
+[ext_resource type="PackedScene" uid="uid://chclxkeh881js" path="res://Assets/Scenes/pannable_camera.tscn" id="12_ttgh6"]
 
 [node name="Main" type="Node2D" unique_id=521555461]
-
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1712630253]
-position = Vector2(0, 16)
 
 [node name="Train" parent="." unique_id=1365227595 node_paths=PackedStringArray("currentTrainTrackSegment") instance=ExtResource("2_qplxx")]
 position = Vector2(-432, 0)
@@ -136,3 +134,6 @@ exitDirectionToNextTrainTrackSegmentMap = {
 2: null,
 6: null
 }
+
+[node name="PannableCamera" parent="." unique_id=1036719170 instance=ExtResource("12_ttgh6")]
+zoomFactor = 1.1

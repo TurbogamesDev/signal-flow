@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://chclxkeh881js"]
+
+[ext_resource type="Script" uid="uid://dqsy48r6sfcgc" path="res://Assets/Scripts/pannable_camera.gd" id="1_e2q3a"]
+
+[node name="PannableCamera" type="Camera2D" unique_id=1036719170]
+script = ExtResource("1_e2q3a")
+panningSpeed = 1.0

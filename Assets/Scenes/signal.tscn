@@ -1,11 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://bd54lagrdbynd"]
+[gd_scene format=3 uid="uid://bd54lagrdbynd"]
 
 [ext_resource type="Script" uid="uid://b4yjqamv685g7" path="res://Assets/Scripts/signal.gd" id="1_6usyx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1mxiq"]
 size = Vector2(16, 16)
 
-[node name="Signal" type="Area2D" node_paths=PackedStringArray("polygon2D")]
+[node name="Signal" type="Area2D" unique_id=1103732942 node_paths=PackedStringArray("polygon2D")]
 z_index = -20
 z_as_relative = false
 collision_layer = 2
@@ -13,14 +13,14 @@ collision_mask = 2
 script = ExtResource("1_6usyx")
 polygon2D = NodePath("Polygon2D")
 
-[node name="Polygon2D" type="Polygon2D" parent="."]
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=2014133486]
 z_index = 1
 z_as_relative = false
 position = Vector2(-32, -40)
 color = Color(1, 0, 0, 1)
 polygon = PackedVector2Array(24, 32, 24, 36, 28, 40, 24, 44, 24, 48, 32, 48, 36, 44, 40, 40, 36, 36, 32, 32)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=621007412]
 shape = SubResource("RectangleShape2D_1mxiq")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
