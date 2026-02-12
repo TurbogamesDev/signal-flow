@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bhmfp1h05agj4" path="res://Assets/Scenes/Track_Segments/base_train_track_segment.tscn" id="1_5ykhd"]
 [ext_resource type="PackedScene" uid="uid://4iylqgc4sm16" path="res://Assets/Scenes/train_track_piece.tscn" id="2_7224s"]
 [ext_resource type="PackedScene" uid="uid://bd54lagrdbynd" path="res://Assets/Scenes/signal.tscn" id="3_jmgui"]
+[ext_resource type="PackedScene" uid="uid://poeibhv4np6b" path="res://Assets/Scenes/buffer.tscn" id="4_ytx31"]
 
 [node name="EastEntry_Reversing_TrainTrackSegment" unique_id=433729378 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap", "trainTrackPieces") instance=ExtResource("1_5ykhd")]
 directionMap = Dictionary[int, int]({
@@ -21,12 +22,12 @@ trainTrackPieces = [NodePath("TrainTrackPieces/TrainTrackPiece_1"), NodePath("Tr
 
 [node name="TrainTrackPiece_1" parent="TrainTrackPieces" index="0" unique_id=753067915 node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_7224s")]
 position = Vector2(0, 64)
-points = PackedVector2Array(192, 0, 0, 0, 192, 0)
+points = PackedVector2Array(192, 0, 16, 0, 192, 0)
 trainSignal = NodePath("../../Signals/Signal_1")
 
 [node name="TrainTrackPiece_2" parent="TrainTrackPieces" index="1" unique_id=1205965602 node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_7224s")]
 position = Vector2(0, 128)
-points = PackedVector2Array(192, 0, 0, 0, 192, 0)
+points = PackedVector2Array(192, 0, 16, 0, 192, 0)
 trainSignal = NodePath("../../Signals/Signal_2")
 
 [node name="Signal_1" parent="Signals" index="0" unique_id=1196814178 instance=ExtResource("3_jmgui")]
@@ -36,3 +37,13 @@ direction = 2
 [node name="Signal_2" parent="Signals" index="1" unique_id=1309332232 instance=ExtResource("3_jmgui")]
 position = Vector2(176, 152)
 direction = 6
+
+[node name="Buffers" type="Node2D" parent="." index="2" unique_id=1568178679]
+
+[node name="Buffer_1" parent="Buffers" index="0" unique_id=1754136004 instance=ExtResource("4_ytx31")]
+position = Vector2(8, 64)
+rotation = 1.5707964
+
+[node name="Buffer_2" parent="Buffers" index="1" unique_id=1557438733 instance=ExtResource("4_ytx31")]
+position = Vector2(8, 128)
+rotation = 1.5707964
