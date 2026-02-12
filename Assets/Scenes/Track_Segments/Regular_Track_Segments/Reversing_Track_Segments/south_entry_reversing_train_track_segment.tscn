@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://cl1l1370pl6fd"]
+
+[ext_resource type="PackedScene" uid="uid://bhmfp1h05agj4" path="res://Assets/Scenes/Track_Segments/base_train_track_segment.tscn" id="1_dceoq"]
+[ext_resource type="PackedScene" uid="uid://4iylqgc4sm16" path="res://Assets/Scenes/train_track_piece.tscn" id="2_2s004"]
+[ext_resource type="PackedScene" uid="uid://bd54lagrdbynd" path="res://Assets/Scenes/signal.tscn" id="3_kx4cq"]
+
+[node name="SouthEntry_Reversing_TrainTrackSegment" unique_id=433729378 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap", "trainTrackPieces") instance=ExtResource("1_dceoq")]
+directionMap = Dictionary[int, int]({
+0: 5,
+4: 1
+})
+exitDirectionToNextTrainTrackSegmentMap = {
+1: null,
+5: null
+}
+entryDirectionToTrainTrackPieceMap = {
+0: NodePath("TrainTrackPieces/TrainTrackPiece_1"),
+4: NodePath("TrainTrackPieces/TrainTrackPiece_2")
+}
+trainTrackPieces = [NodePath("TrainTrackPieces/TrainTrackPiece_1"), NodePath("TrainTrackPieces/TrainTrackPiece_2")]
+
+[node name="TrainTrackPiece_1" parent="TrainTrackPieces" index="0" unique_id=753067915 node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_2s004")]
+position = Vector2(64, 0)
+rotation = -4.712389
+points = PackedVector2Array(192, 0, 0, 0, 192, 0)
+trainSignal = NodePath("../../Signals/Signal_1")
+
+[node name="TrainTrackPiece_2" parent="TrainTrackPieces" index="1" unique_id=1205965602 node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_2s004")]
+position = Vector2(128, 0)
+rotation = -4.712389
+points = PackedVector2Array(192, 0, 0, 0, 192, 0)
+trainSignal = NodePath("../../Signals/Signal_2")
+
+[node name="Signal_1" parent="Signals" index="0" unique_id=1196814178 instance=ExtResource("3_kx4cq")]
+position = Vector2(40, 176)
+rotation = -4.712389
+direction = 5
+
+[node name="Signal_2" parent="Signals" index="1" unique_id=1309332232 instance=ExtResource("3_kx4cq")]
+position = Vector2(152, 176)
+rotation = -4.712389
+direction = 1
