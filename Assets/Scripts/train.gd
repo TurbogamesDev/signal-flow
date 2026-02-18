@@ -8,6 +8,8 @@ var currentTrainTrackPiece: TrainTrackPiece
 
 var lastSignalSensor: SignalSensor
 
+var justTerminated: bool = false
+
 @export var maxSpeed: float
 @export var polygon2D: Polygon2D
 
@@ -117,9 +119,17 @@ func changeToNextTrainTrackSegment() -> bool:
 
 	return true
 
-func handleTrainSignalDetection(train_signal: TrainSignal):
+func handleTrainSignalDetection(train_signal: TrainSignal):	
+	print("Is train signal a terminating one?: %s" % ("Yes" if train_signal.terminating else "No"))
+
 	if train_signal.direction != currentDirection:
 		return
+
+	if train_signal.terminating:
+		if not justTerminated:
+			return
+
+		justTerminated = false
 
 	if train_signal.proceed:
 		return
@@ -166,6 +176,8 @@ func handlePlatformSensorDetection(platform_sensor: PlatformSensor):
 	if platform_sensor.terminatingPlatform:
 		# temporary
 		handleThroughPlatformSensorDetection()
+
+		justTerminated = true
 	else:
 		handleThroughPlatformSensorDetection()
 

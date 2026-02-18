@@ -1,6 +1,7 @@
 extends Area2D
 class_name TrainSignal
 
+@export var terminating: bool
 @export var polygon2D: Polygon2D
 @export var direction: Enums.TrainDirection
 var proceed = false

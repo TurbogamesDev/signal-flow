@@ -32,10 +32,12 @@ trainSignal = NodePath("../../Signals/Signal_2")
 
 [node name="Signal_1" parent="Signals" index="0" unique_id=1196814178 instance=ExtResource("3_jmgui")]
 position = Vector2(176, 40)
+terminating = true
 direction = 2
 
 [node name="Signal_2" parent="Signals" index="1" unique_id=1309332232 instance=ExtResource("3_jmgui")]
 position = Vector2(176, 152)
+terminating = true
 direction = 6
 
 [node name="Buffers" type="Node2D" parent="." index="2" unique_id=1568178679]

@@ -35,10 +35,12 @@ trainSignal = NodePath("../../Signals/Signal_2")
 [node name="Signal_1" parent="Signals" index="0" unique_id=1196814178 instance=ExtResource("3_x4xm8")]
 position = Vector2(40, 16)
 rotation = -1.5707964
+terminating = true
 
 [node name="Signal_2" parent="Signals" index="1" unique_id=1309332232 instance=ExtResource("3_x4xm8")]
 position = Vector2(152, 16)
 rotation = -1.5707964
+terminating = true
 direction = 4
 
 [node name="Buffers" type="Node2D" parent="." index="2" unique_id=96006296]
