@@ -27,20 +27,20 @@ zoomFactor = 1.1
 
 [node name="Train" parent="." unique_id=1365227595 node_paths=PackedStringArray("currentTrainTrackSegment") instance=ExtResource("2_qplxx")]
 position = Vector2(-432, 0)
+maxSpeed = 144.0
 currentTrainTrackSegment = NodePath("../2_NorthToSouth_TrainTrackSegment")
-currentDirection = 1
-maxSpeed = 96.0
 
 [node name="Train2" parent="." unique_id=1123467835 node_paths=PackedStringArray("currentTrainTrackSegment") instance=ExtResource("2_qplxx")]
 position = Vector2(400, -8)
-currentTrainTrackSegment = NodePath("../2_NorthToSouth_TrainTrackSegment")
-maxSpeed = 96.0
+maxSpeed = 144.0
+currentTrainTrackSegment = NodePath("../Horizontal_Through_StationTrainTrackSegment")
+currentDirection = 2
 
 [node name="SouthToWest_TrainTrackSegment" parent="." unique_id=1468857590 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("6_acsc0")]
 position = Vector2(96, -280)
 exitDirectionToNextTrainTrackSegmentMap = {
 1: NodePath("../3_NorthToSouth_TrainTrackSegment3"),
-3: NodePath("")
+3: null
 }
 entryDirectionToTrainTrackPieceMap = {
 0: NodePath("TrainTrackPieces/TrainTrackPiece_1"),

@@ -1,21 +1,33 @@
-[gd_scene load_steps=2 format=3 uid="uid://d0swi8sb81sqg"]
+[gd_scene format=3 uid="uid://d0swi8sb81sqg"]
 
-[ext_resource type="Script" uid="uid://cltdkojxrv0tu" path="res://Assets/Scripts/train.gd" id="1_a6kih"]
+[ext_resource type="Script" uid="uid://baokqeen18v3f" path="res://Assets/Scripts/train_scripts/train.gd" id="1_a6kih"]
+[ext_resource type="Script" uid="uid://diqk4lb7767dn" path="res://Assets/Scripts/train_scripts/train_movement_handler.gd" id="2_ksuns"]
+[ext_resource type="Script" uid="uid://dgfgf8nkp0355" path="res://Assets/Scripts/train_scripts/train_sensor_handler.gd" id="3_etd5i"]
 
-[node name="Train" type="Node2D" node_paths=PackedStringArray("polygon2D")]
+[node name="Train" type="Node2D" unique_id=1649803757 node_paths=PackedStringArray("polygon2D", "trainMovementHandler", "trainSensorHandler")]
 script = ExtResource("1_a6kih")
 polygon2D = NodePath("Polygon2D")
+trainMovementHandler = NodePath("MovementHandler")
+trainSensorHandler = NodePath("SensorHandler")
 
-[node name="Polygon2D" type="Polygon2D" parent="."]
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1027431223]
 z_index = 10
 z_as_relative = false
 polygon = PackedVector2Array(-32, -24, -56, 0, -32, 24, 32, 24, 56, 0, 32, -24)
 
-[node name="CollisionDetector" type="Area2D" parent="."]
+[node name="CollisionDetector" type="Area2D" parent="." unique_id=211796945]
 z_as_relative = false
 collision_mask = 20
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CollisionDetector"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CollisionDetector" unique_id=401279383]
 polygon = PackedVector2Array(-32, 24, 32, 24, 56, 0, 32, -24, -32, -24, -56, 0)
+
+[node name="MovementHandler" type="Node2D" parent="." unique_id=400698290 node_paths=PackedStringArray("train")]
+script = ExtResource("2_ksuns")
+train = NodePath("..")
+
+[node name="SensorHandler" type="Node2D" parent="." unique_id=1925079762 node_paths=PackedStringArray("train")]
+script = ExtResource("3_etd5i")
+train = NodePath("..")
 
 [connection signal="area_entered" from="CollisionDetector" to="." method="_on_collision_detector_area_entered"]
