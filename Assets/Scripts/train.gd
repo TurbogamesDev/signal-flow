@@ -7,6 +7,7 @@ class_name Train
 var currentTrainTrackPiece: TrainTrackPiece
 
 var lastSignalSensor: SignalSensor
+var lastPlatformSensor: PlatformSensor
 
 var justTerminated: bool = false
 
@@ -78,8 +79,6 @@ func updatePosition(delta: float) -> bool:
 		moveByProgressPxOfPathFollow2D(pixels_left_to_cover)
 
 	return true
-
-		
 
 func moveByProgressPxOfPathFollow2D(progress_px: float):
 	var path_follow_2d = currentTrainTrackPiece.pathFollow2D
@@ -163,21 +162,35 @@ func handleThroughPlatformSensorDetection():
 
 	await get_tree().create_timer(PLATFORM_WAIT_TIME).timeout
 
-	# currentColourTween = get_tree().create_tween() \
-	# 	.tween_property(polygon2D, "color", MOVING_COLOR, 15.0)
+	polygon2D.color = MOVING_COLOR
 
-	# await currentColourTween.finished
+	currentAcceleration = ACCELERATION_CONSTANT
+
+func handleTerminatingPlatformSensorDetection():
+	currentAcceleration = DECELERATION_CONSTANT
+	
+	polygon2D.color = PLATFORM_COLOR
+
+	await get_tree().create_timer(PLATFORM_WAIT_TIME).timeout
+
+	var path_follow_2d = currentTrainTrackPiece.pathFollow2D
+
+	path_follow_2d.progress_ratio = (1 - path_follow_2d.progress_ratio)
 
 	polygon2D.color = MOVING_COLOR
 
 	currentAcceleration = ACCELERATION_CONSTANT
 
-func handlePlatformSensorDetection(platform_sensor: PlatformSensor):
-	if platform_sensor.terminatingPlatform:
-		# temporary
-		handleThroughPlatformSensorDetection()
+	justTerminated = true
 
-		justTerminated = true
+func handlePlatformSensorDetection(platform_sensor: PlatformSensor):
+	if platform_sensor == lastPlatformSensor:
+		return
+
+	lastPlatformSensor = platform_sensor
+
+	if platform_sensor.terminatingPlatform:
+		handleTerminatingPlatformSensorDetection()
 	else:
 		handleThroughPlatformSensorDetection()
 
@@ -186,5 +199,3 @@ func _on_collision_detector_area_entered(area: Area2D) -> void:
 		handleSignalSensorDetection(area)
 	elif area is PlatformSensor:
 		handlePlatformSensorDetection(area)
-
-	

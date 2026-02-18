@@ -23,13 +23,13 @@ rotation = -1.5707964
 
 [node name="PlatformSensor_1" parent="PlatformSensors" parent_id_path=PackedInt32Array(1700686894) index="0" unique_id=1867313335 instance=ExtResource("3_ulje6")]
 z_index = 15
-position = Vector2(64, 136)
+position = Vector2(64, 160)
 rotation = -7.853982
 terminatingPlatform = true
 
 [node name="PlatformSensor_2" parent="PlatformSensors" parent_id_path=PackedInt32Array(1700686894) index="1" unique_id=753766397 instance=ExtResource("3_ulje6")]
 z_index = 15
-position = Vector2(128, 136)
+position = Vector2(128, 160)
 rotation = -1.5707964
 terminatingPlatform = true
 

@@ -20,12 +20,12 @@ position = Vector2(96, 24)
 position = Vector2(96, 168)
 
 [node name="PlatformSensor_1" parent="PlatformSensors" parent_id_path=PackedInt32Array(1700686894) index="0" unique_id=1867313335 instance=ExtResource("3_s5ulu")]
-position = Vector2(56, 64)
+position = Vector2(32, 64)
 rotation = -6.2831855
 terminatingPlatform = true
 
 [node name="PlatformSensor_2" parent="PlatformSensors" parent_id_path=PackedInt32Array(1700686894) index="1" unique_id=753766397 instance=ExtResource("3_s5ulu")]
-position = Vector2(56, 128)
+position = Vector2(32, 128)
 terminatingPlatform = true
 
 [node name="EastEntry_Reversing_TrainTrackSegment" parent="TrainTrackSegments" parent_id_path=PackedInt32Array(1330607345) index="0" unique_id=433729378 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("4_msyi8")]
