@@ -1,19 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://jks56xlsixau"]
+[gd_scene format=3 uid="uid://jks56xlsixau"]
 
 [ext_resource type="Script" uid="uid://bq1b68tx66icq" path="res://Assets/Scripts/base_switching_train_track_segment.gd" id="1_om4ka"]
 
-[node name="BaseSwitchingTrainTrackSegment" type="Node2D"]
+[node name="BaseSwitchingTrainTrackSegment" type="Node2D" unique_id=1955557368]
 script = ExtResource("1_om4ka")
 
-[node name="ToggleSelection" type="Area2D" parent="."]
+[node name="ToggleSelection" type="Area2D" parent="." unique_id=678265131]
 z_index = -30
 z_as_relative = false
+position = Vector2(-96, -96)
 collision_layer = 8
 collision_mask = 0
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="ToggleSelection"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="ToggleSelection" unique_id=1069450465]
 polygon = PackedVector2Array(0, 56, 0, 136, 32, 136, 56, 160, 56, 192, 136, 192, 136, 160, 160, 136, 192, 136, 192, 56, 160, 56, 136, 32, 136, 0, 56, 0, 56, 32, 32, 56)
 
-[node name="TrainTrackSegments" type="Node2D" parent="."]
+[node name="TrainTrackSegments" type="Node2D" parent="." unique_id=1648350426]
 
 [connection signal="input_event" from="ToggleSelection" to="." method="_on_toggle_selection_input_event"]

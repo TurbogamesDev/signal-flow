@@ -6,7 +6,9 @@
 script = ExtResource("1_dl7uo")
 
 [node name="Platforms" type="Node2D" parent="." unique_id=1485539501]
+position = Vector2(-96, -96)
 
 [node name="PlatformSensors" type="Node2D" parent="." unique_id=1700686894]
+position = Vector2(-96, -96)
 
 [node name="TrainTrackSegments" type="Node2D" parent="." unique_id=1330607345]

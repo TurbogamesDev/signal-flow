@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://uof2mkd5iamg"]
+[gd_scene format=3 uid="uid://uof2mkd5iamg"]
 
 [ext_resource type="Script" uid="uid://bel4dmy3tkex6" path="res://Assets/Scripts/base_train_track_segment.gd" id="1_vo8ou"]
 [ext_resource type="PackedScene" uid="uid://4iylqgc4sm16" path="res://Assets/Scenes/train_track_piece.tscn" id="2_nx516"]
 [ext_resource type="PackedScene" uid="uid://bd54lagrdbynd" path="res://Assets/Scenes/signal.tscn" id="3_xvsox"]
 
-[node name="EastToWest_TrainTrackSegment" type="Node2D" node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap", "trainTrackPieces")]
+[node name="EastToWest_TrainTrackSegment" type="Node2D" unique_id=2085642467 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap", "trainTrackPieces")]
 script = ExtResource("1_vo8ou")
 directionMap = Dictionary[int, int]({
 2: 2,
@@ -20,24 +20,26 @@ entryDirectionToTrainTrackPieceMap = {
 }
 trainTrackPieces = [NodePath("TrainTrackPieces/TrainTrackPiece_1"), NodePath("TrainTrackPieces/TrainTrackPiece_2")]
 
-[node name="TrainTrackPieces" type="Node2D" parent="."]
+[node name="TrainTrackPieces" type="Node2D" parent="." unique_id=1320900623]
+position = Vector2(-96, -96)
 
-[node name="TrainTrackPiece_1" parent="TrainTrackPieces" node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_nx516")]
+[node name="TrainTrackPiece_1" parent="TrainTrackPieces" unique_id=67889376 node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_nx516")]
 position = Vector2(0, 64)
 trainSignal = NodePath("../../Signals/Signal_1")
 
-[node name="TrainTrackPiece_2" parent="TrainTrackPieces" node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_nx516")]
+[node name="TrainTrackPiece_2" parent="TrainTrackPieces" unique_id=1049153218 node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_nx516")]
 position = Vector2(192, 128)
 rotation = -3.1415925
 trainSignal = NodePath("../../Signals/Signal_2")
 
-[node name="Signals" type="Node2D" parent="."]
+[node name="Signals" type="Node2D" parent="." unique_id=1638539102]
+position = Vector2(-96, -96)
 
-[node name="Signal_1" parent="Signals" instance=ExtResource("3_xvsox")]
+[node name="Signal_1" parent="Signals" unique_id=457703633 instance=ExtResource("3_xvsox")]
 position = Vector2(176, 40)
 direction = 2
 
-[node name="Signal_2" parent="Signals" instance=ExtResource("3_xvsox")]
+[node name="Signal_2" parent="Signals" unique_id=1936756164 instance=ExtResource("3_xvsox")]
 position = Vector2(16, 152)
 rotation = 3.1415927
 direction = 3

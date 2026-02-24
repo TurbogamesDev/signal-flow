@@ -20,31 +20,32 @@ entryDirectionToTrainTrackPieceMap = {
 }
 trainTrackPieces = [NodePath("TrainTrackPieces/TrainTrackPiece_1"), NodePath("TrainTrackPieces/TrainTrackPiece_2")]
 
-[node name="TrainTrackPiece_1" parent="TrainTrackPieces" index="0" unique_id=753067915 node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_mrtgv")]
+[node name="TrainTrackPiece_1" parent="TrainTrackPieces" parent_id_path=PackedInt32Array(380983663) index="0" unique_id=753067915 node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_mrtgv")]
 position = Vector2(192, 64)
 rotation = -3.1415927
 points = PackedVector2Array(192, 0, 16, 0, 192, 0)
 trainSignal = NodePath("../../Signals/Signal_1")
 
-[node name="TrainTrackPiece_2" parent="TrainTrackPieces" index="1" unique_id=1205965602 node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_mrtgv")]
+[node name="TrainTrackPiece_2" parent="TrainTrackPieces" parent_id_path=PackedInt32Array(380983663) index="1" unique_id=1205965602 node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_mrtgv")]
 position = Vector2(192, 128)
 rotation = -3.1415927
 points = PackedVector2Array(192, 0, 16, 0, 192, 0)
 trainSignal = NodePath("../../Signals/Signal_2")
 
-[node name="Signal_1" parent="Signals" index="0" unique_id=1196814178 instance=ExtResource("3_x8qpi")]
+[node name="Signal_1" parent="Signals" parent_id_path=PackedInt32Array(104402083) index="0" unique_id=1196814178 instance=ExtResource("3_x8qpi")]
 position = Vector2(16, 40)
 rotation = -3.1415927
 terminating = true
 direction = 7
 
-[node name="Signal_2" parent="Signals" index="1" unique_id=1309332232 instance=ExtResource("3_x8qpi")]
+[node name="Signal_2" parent="Signals" parent_id_path=PackedInt32Array(104402083) index="1" unique_id=1309332232 instance=ExtResource("3_x8qpi")]
 position = Vector2(16, 152)
 rotation = -3.1415927
 terminating = true
 direction = 3
 
 [node name="Buffers" type="Node2D" parent="." index="2" unique_id=640237551]
+position = Vector2(-96, -96)
 
 [node name="Buffer_1" parent="Buffers" index="0" unique_id=1754136004 instance=ExtResource("4_1ol3k")]
 position = Vector2(176, 64)

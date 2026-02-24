@@ -14,7 +14,7 @@ exitDirectionToNextTrainTrackSegmentMap = {
 7: null
 }
 
-[node name="EastToWest_TrainTrackSegment" parent="TrainTrackSegments" index="0" unique_id=1163675223 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("2_upy3m")]
+[node name="EastToWest_TrainTrackSegment" parent="TrainTrackSegments" parent_id_path=PackedInt32Array(1648350426) index="0" unique_id=1163675223 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("2_upy3m")]
 exitDirectionToNextTrainTrackSegmentMap = {
 2: null,
 3: null
@@ -24,8 +24,7 @@ entryDirectionToTrainTrackPieceMap = {
 3: NodePath("TrainTrackPieces/TrainTrackPiece_2")
 }
 
-[node name="Horizontal_FollowingToOpposing_SingleTrainTrackSegment" parent="TrainTrackSegments" index="1" unique_id=73624038 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("3_clyim")]
-position = Vector2(0, 64)
+[node name="Horizontal_FollowingToOpposing_SingleTrainTrackSegment" parent="TrainTrackSegments" parent_id_path=PackedInt32Array(1648350426) index="1" unique_id=73624038 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("3_clyim")]
 exitDirectionToNextTrainTrackSegmentMap = {
 6: null,
 7: null
@@ -35,8 +34,7 @@ entryDirectionToTrainTrackPieceMap = {
 3: NodePath("TrainTrackPieces/TrainTrackPiece_2")
 }
 
-[node name="Horizontal_OpposingToFollowing_SingleTrainTrackSegment" parent="TrainTrackSegments" index="2" unique_id=649297843 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("4_y14x6")]
-position = Vector2(0, 64)
+[node name="Horizontal_OpposingToFollowing_SingleTrainTrackSegment" parent="TrainTrackSegments" parent_id_path=PackedInt32Array(1648350426) index="2" unique_id=649297843 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("4_y14x6")]
 exitDirectionToNextTrainTrackSegmentMap = {
 2: null,
 3: null

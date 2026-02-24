@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://cn4ir14rwfmv7"]
+[gd_scene format=3 uid="uid://cn4ir14rwfmv7"]
 
 [ext_resource type="PackedScene" uid="uid://bhmfp1h05agj4" path="res://Assets/Scenes/Track_Segments/base_train_track_segment.tscn" id="1_6fv1x"]
 [ext_resource type="PackedScene" uid="uid://4iylqgc4sm16" path="res://Assets/Scenes/train_track_piece.tscn" id="2_jr1pn"]
 [ext_resource type="PackedScene" uid="uid://bd54lagrdbynd" path="res://Assets/Scenes/signal.tscn" id="3_7yv51"]
 
-[node name="NorthToEast_TrainTrackSegment" node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap", "trainTrackPieces") instance=ExtResource("1_6fv1x")]
+[node name="NorthToEast_TrainTrackSegment" unique_id=2132877072 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap", "trainTrackPieces") instance=ExtResource("1_6fv1x")]
 directionMap = Dictionary[int, int]({
 1: 2,
 3: 0
@@ -19,21 +19,27 @@ entryDirectionToTrainTrackPieceMap = {
 }
 trainTrackPieces = [NodePath("TrainTrackPieces/TrainTrackPiece_1"), NodePath("TrainTrackPieces/TrainTrackPiece_2")]
 
-[node name="TrainTrackPiece_1" parent="TrainTrackPieces" index="0" node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_jr1pn")]
+[node name="TrainTrackPieces" parent="." index="0" unique_id=380983663]
+position = Vector2(-96, -96)
+
+[node name="TrainTrackPiece_1" parent="TrainTrackPieces" index="0" unique_id=774861147 node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_jr1pn")]
 position = Vector2(64, 192)
 rotation = -1.5707964
 points = PackedVector2Array(63.999985, 128, 64, 64, 128, 3.8146973e-06, 192, 0)
 trainSignal = NodePath("../../Signals/Signal_1")
 
-[node name="TrainTrackPiece_2" parent="TrainTrackPieces" index="1" node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_jr1pn")]
+[node name="TrainTrackPiece_2" parent="TrainTrackPieces" index="1" unique_id=1800608468 node_paths=PackedStringArray("trainSignal") instance=ExtResource("2_jr1pn")]
 position = Vector2(0, 64)
 points = PackedVector2Array(128, -64, 128, -32, 160, 0, 192, 0)
 trainSignal = NodePath("../../Signals/Signal_2")
 
-[node name="Signal_1" parent="Signals" index="0" instance=ExtResource("3_7yv51")]
+[node name="Signals" parent="." index="1" unique_id=104402083]
+position = Vector2(-96, -96)
+
+[node name="Signal_1" parent="Signals" index="0" unique_id=1879252391 instance=ExtResource("3_7yv51")]
 position = Vector2(40, 16)
 rotation = -1.5707964
 
-[node name="Signal_2" parent="Signals" index="1" instance=ExtResource("3_7yv51")]
+[node name="Signal_2" parent="Signals" index="1" unique_id=1852677680 instance=ExtResource("3_7yv51")]
 position = Vector2(176, 40)
 direction = 2

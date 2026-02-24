@@ -1,11 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://bgasxr7evrcb6"]
+[gd_scene format=3 uid="uid://bgasxr7evrcb6"]
 
 [ext_resource type="PackedScene" uid="uid://jks56xlsixau" path="res://Assets/Scenes/Track_Segments/base_switching_train_track_segment.tscn" id="1_248db"]
 [ext_resource type="PackedScene" uid="uid://tyj41evmy1c6" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Straight_Track_Segments/north_to_south_train_track_segment.tscn" id="2_248db"]
 [ext_resource type="PackedScene" uid="uid://baekl3yos1b3n" path="res://Assets/Scenes/Track_Segments/Singular_Track_Segments/Lane_Changing_Track_Segments/vertical_following_to_opposing_single_train_track_segment.tscn" id="3_xxuvw"]
 [ext_resource type="PackedScene" uid="uid://dx7tjkq41gmmd" path="res://Assets/Scenes/Track_Segments/Singular_Track_Segments/Lane_Changing_Track_Segments/vertical_opposing_to_following_single_train_track_segment.tscn" id="4_13fwu"]
 
-[node name="Vertical_DoubleCrossover_SwitchingTrainTrackSegment" node_paths=PackedStringArray("trainTrackSegments", "exitDirectionToNextTrainTrackSegmentMap") instance=ExtResource("1_248db")]
+[node name="Vertical_DoubleCrossover_SwitchingTrainTrackSegment" unique_id=176831766 node_paths=PackedStringArray("trainTrackSegments", "exitDirectionToNextTrainTrackSegmentMap") instance=ExtResource("1_248db")]
 trainTrackSegments = [NodePath("TrainTrackSegments/NorthToSouth_TrainTrackSegment"), NodePath("TrainTrackSegments/Vertical_FollowingToOpposing_SingleTrainTrackSegment"), NodePath("TrainTrackSegments/Vertical_OpposingToFollowing_SingleTrainTrackSegment")]
 exitDirectionToNextTrainTrackSegmentMap = {
 0: null,
@@ -14,7 +14,7 @@ exitDirectionToNextTrainTrackSegmentMap = {
 5: null
 }
 
-[node name="NorthToSouth_TrainTrackSegment" parent="TrainTrackSegments" index="0" node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("2_248db")]
+[node name="NorthToSouth_TrainTrackSegment" parent="TrainTrackSegments" parent_id_path=PackedInt32Array(1648350426) index="0" unique_id=335059733 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("2_248db")]
 exitDirectionToNextTrainTrackSegmentMap = {
 0: null,
 1: null
@@ -24,8 +24,7 @@ entryDirectionToTrainTrackPieceMap = {
 1: NodePath("TrainTrackPieces/TrainTrackPiece_2")
 }
 
-[node name="Vertical_FollowingToOpposing_SingleTrainTrackSegment" parent="TrainTrackSegments" index="1" node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("3_xxuvw")]
-position = Vector2(64, 0)
+[node name="Vertical_FollowingToOpposing_SingleTrainTrackSegment" parent="TrainTrackSegments" parent_id_path=PackedInt32Array(1648350426) index="1" unique_id=494366054 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("3_xxuvw")]
 exitDirectionToNextTrainTrackSegmentMap = {
 4: null,
 5: null
@@ -35,8 +34,7 @@ entryDirectionToTrainTrackPieceMap = {
 1: NodePath("TrainTrackPieces/TrainTrackPiece_1")
 }
 
-[node name="Vertical_OpposingToFollowing_SingleTrainTrackSegment" parent="TrainTrackSegments" index="2" node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("4_13fwu")]
-position = Vector2(64, 0)
+[node name="Vertical_OpposingToFollowing_SingleTrainTrackSegment" parent="TrainTrackSegments" parent_id_path=PackedInt32Array(1648350426) index="2" unique_id=866688006 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("4_13fwu")]
 exitDirectionToNextTrainTrackSegmentMap = {
 0: null,
 1: null
