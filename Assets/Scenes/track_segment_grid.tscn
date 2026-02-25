@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://dhxahw6xlbcct"]
+
+[ext_resource type="PackedScene" uid="uid://uof2mkd5iamg" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Straight_Track_Segments/east_to_west_train_track_segment.tscn" id="1_eeysh"]
+[ext_resource type="PackedScene" uid="uid://tyj41evmy1c6" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Straight_Track_Segments/north_to_south_train_track_segment.tscn" id="2_q3vy2"]
+[ext_resource type="PackedScene" uid="uid://cn4ir14rwfmv7" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Curved_Track_Segments/north_to_east_train_track_segment.tscn" id="3_7p61q"]
+[ext_resource type="PackedScene" uid="uid://cj6kbw3vh63tn" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Curved_Track_Segments/north_to_west_train_track_segment.tscn" id="4_jnyw3"]
+[ext_resource type="PackedScene" uid="uid://fq2m6bta7b6w" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Curved_Track_Segments/south_to_east_train_track_segment.tscn" id="5_2c81a"]
+[ext_resource type="PackedScene" uid="uid://d0ys0kgu8rnk5" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Curved_Track_Segments/south_to_west_train_track_segment.tscn" id="6_3ro37"]
+[ext_resource type="PackedScene" uid="uid://doarwamfqglh2" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Reversing_Track_Segments/east_entry_reversing_train_track_segment.tscn" id="7_ls4k0"]
+[ext_resource type="PackedScene" uid="uid://dxke0tr0gvilu" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Reversing_Track_Segments/north_entry_reversing_train_track_segment.tscn" id="8_tnoxl"]
+[ext_resource type="PackedScene" uid="uid://cl1l1370pl6fd" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Reversing_Track_Segments/south_entry_reversing_train_track_segment.tscn" id="9_5eo8s"]
+[ext_resource type="PackedScene" uid="uid://bukelr4o4axoc" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Reversing_Track_Segments/west_entry_reversing_train_track_segment.tscn" id="10_jbqr4"]
+[ext_resource type="PackedScene" uid="uid://cm2i36frehr82" path="res://Assets/Scenes/Track_Segments/Singular_Track_Segments/Lane_Changing_Track_Segments/horizontal_following_to_opposing_single_train_track_segment.tscn" id="11_b11oe"]
+[ext_resource type="PackedScene" uid="uid://bap3qogtv2foq" path="res://Assets/Scenes/Track_Segments/Singular_Track_Segments/Lane_Changing_Track_Segments/horizontal_opposing_to_following_single_train_track_segment.tscn" id="12_gx26n"]
+[ext_resource type="PackedScene" uid="uid://baekl3yos1b3n" path="res://Assets/Scenes/Track_Segments/Singular_Track_Segments/Lane_Changing_Track_Segments/vertical_following_to_opposing_single_train_track_segment.tscn" id="13_gd88p"]
+[ext_resource type="PackedScene" uid="uid://dx7tjkq41gmmd" path="res://Assets/Scenes/Track_Segments/Singular_Track_Segments/Lane_Changing_Track_Segments/vertical_opposing_to_following_single_train_track_segment.tscn" id="14_ljt76"]
+[ext_resource type="PackedScene" uid="uid://dkhthe5boqoq0" path="res://Assets/Scenes/Track_Segments/Station_Track_Segments/Through_Station_Track_Segments/horizontal_through_station_train_track_segment.tscn" id="15_bq0es"]
+[ext_resource type="PackedScene" uid="uid://84re2pj1xwqo" path="res://Assets/Scenes/Track_Segments/Station_Track_Segments/Through_Station_Track_Segments/vertical_through_station_train_track_segment.tscn" id="16_4wvd1"]
+[ext_resource type="PackedScene" uid="uid://d1xk55ioyrf0s" path="res://Assets/Scenes/Track_Segments/Station_Track_Segments/Terminating_Station_Track_Segments/east_entry_terminating_station_train_track_segment.tscn" id="17_sv360"]
+[ext_resource type="PackedScene" uid="uid://em1831bpxim2" path="res://Assets/Scenes/Track_Segments/Station_Track_Segments/Terminating_Station_Track_Segments/north_entry_terminating_station_train_track_segment.tscn" id="18_hqyjt"]
+[ext_resource type="PackedScene" uid="uid://pj050kt7uek4" path="res://Assets/Scenes/Track_Segments/Station_Track_Segments/Terminating_Station_Track_Segments/south_entry_terminating_station_train_track_segment.tscn" id="19_bmles"]
+[ext_resource type="PackedScene" uid="uid://clxj1dofn1las" path="res://Assets/Scenes/Track_Segments/Station_Track_Segments/Terminating_Station_Track_Segments/west_entry_terminating_station_train_track_segment.tscn" id="20_0qa2m"]
+[ext_resource type="PackedScene" uid="uid://3phhcmc23hhn" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Two_Way_Track_Segments/east_to_west_and_north_to_east_switching_train_track_segment.tscn" id="21_0cgic"]
+[ext_resource type="PackedScene" uid="uid://fsjrt3gpodhi" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Two_Way_Track_Segments/east_to_west_and_north_to_west_switching_train_track_segment.tscn" id="22_vwhhx"]
+[ext_resource type="PackedScene" uid="uid://bcs1w5pgrrryj" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Two_Way_Track_Segments/east_to_west_and_south_to_east_switching_train_track_segment.tscn" id="23_arx68"]
+[ext_resource type="PackedScene" uid="uid://cesm7sakpbvy4" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Two_Way_Track_Segments/east_to_west_and_south_to_west_switching_train_track_segment.tscn" id="24_le3ke"]
+[ext_resource type="PackedScene" uid="uid://baemw4xaftwpw" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Two_Way_Track_Segments/north_to_south_and_north_to_east_switching_train_track_segment.tscn" id="25_1oisd"]
+[ext_resource type="PackedScene" uid="uid://4dj2xe0uqcrf" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Two_Way_Track_Segments/north_to_south_and_north_to_west_switching_train_track_segment.tscn" id="26_c6rln"]
+[ext_resource type="PackedScene" uid="uid://0moh5vlxk4jx" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Two_Way_Track_Segments/north_to_south_and_south_to_east_switching_train_track_segment.tscn" id="27_ekj3s"]
+[ext_resource type="PackedScene" uid="uid://bcl7x3epe584" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Two_Way_Track_Segments/north_to_south_and_south_to_west_switching_train_track_segment.tscn" id="28_2urn7"]
+[ext_resource type="PackedScene" uid="uid://d10b6gac1yc5p" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Double_Crossover_Track_Segments/horizontal_double_crossover_switching_train_track_segment.tscn" id="29_t2s41"]
+[ext_resource type="PackedScene" uid="uid://bgasxr7evrcb6" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Double_Crossover_Track_Segments/vertical_double_crossover_switching_train_track_segment.tscn" id="30_lct6y"]
+[ext_resource type="Script" uid="uid://dygcbt7qihc63" path="res://Assets/Scripts/track_segment_grid.gd" id="31_q3vy2"]
+
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_ttgh6"]
+resource_name = "Regular_Track_Segments"
+scenes/0/scene = ExtResource("1_eeysh")
+scenes/1/scene = ExtResource("2_q3vy2")
+scenes/2/scene = ExtResource("3_7p61q")
+scenes/3/scene = ExtResource("4_jnyw3")
+scenes/4/scene = ExtResource("5_2c81a")
+scenes/5/scene = ExtResource("6_3ro37")
+scenes/6/scene = ExtResource("7_ls4k0")
+scenes/7/scene = ExtResource("8_tnoxl")
+scenes/8/scene = ExtResource("9_5eo8s")
+scenes/9/scene = ExtResource("10_jbqr4")
+
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_dxo86"]
+resource_name = "Singular_Track_Segments"
+scenes/0/scene = ExtResource("11_b11oe")
+scenes/1/scene = ExtResource("12_gx26n")
+scenes/2/scene = ExtResource("13_gd88p")
+scenes/3/scene = ExtResource("14_ljt76")
+
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_xcy2v"]
+resource_name = "Station_Track_Segments"
+scenes/0/scene = ExtResource("15_bq0es")
+scenes/1/scene = ExtResource("16_4wvd1")
+scenes/2/scene = ExtResource("17_sv360")
+scenes/3/scene = ExtResource("18_hqyjt")
+scenes/4/scene = ExtResource("19_bmles")
+scenes/5/scene = ExtResource("20_0qa2m")
+
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_ews5c"]
+resource_name = "Switching_Track_Segments"
+scenes/0/scene = ExtResource("21_0cgic")
+scenes/1/scene = ExtResource("22_vwhhx")
+scenes/2/scene = ExtResource("23_arx68")
+scenes/3/scene = ExtResource("24_le3ke")
+scenes/4/scene = ExtResource("25_1oisd")
+scenes/5/scene = ExtResource("26_c6rln")
+scenes/6/scene = ExtResource("27_ekj3s")
+scenes/7/scene = ExtResource("28_2urn7")
+scenes/8/scene = ExtResource("29_t2s41")
+scenes/9/scene = ExtResource("30_lct6y")
+
+[sub_resource type="TileSet" id="TileSet_4qkp8"]
+tile_size = Vector2i(192, 192)
+sources/0 = SubResource("TileSetScenesCollectionSource_ttgh6")
+sources/1 = SubResource("TileSetScenesCollectionSource_dxo86")
+sources/2 = SubResource("TileSetScenesCollectionSource_xcy2v")
+sources/3 = SubResource("TileSetScenesCollectionSource_ews5c")
+
+[node name="TrackSegmentGrid" type="TileMapLayer" unique_id=2026210649]
+tile_set = SubResource("TileSet_4qkp8")
+script = ExtResource("31_q3vy2")
