@@ -76,6 +76,10 @@ scenes/9/scene = ExtResource("30_lct6y")
 
 [sub_resource type="TileSet" id="TileSet_4qkp8"]
 tile_size = Vector2i(192, 192)
+custom_data_layer_0/name = "directionMap"
+custom_data_layer_0/type = 27
+custom_data_layer_1/name = ""
+custom_data_layer_1/type = 0
 sources/0 = SubResource("TileSetScenesCollectionSource_ttgh6")
 sources/1 = SubResource("TileSetScenesCollectionSource_dxo86")
 sources/2 = SubResource("TileSetScenesCollectionSource_xcy2v")
