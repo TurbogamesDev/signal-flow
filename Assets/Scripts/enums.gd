@@ -60,3 +60,10 @@ enum SwitchingTrackSegment {
     HORIZONTAL_DOUBLE_CROSSOVER,
     VERTICAL_DOUBLE_CROSSOVER
 }
+
+enum RelativePosition {
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST
+}
