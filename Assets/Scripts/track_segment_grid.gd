@@ -2,6 +2,7 @@ extends TileMapLayer
 class_name TrackSegmentGrid
 
 var trackSegmentToDirectionMap = []
+var segmentInstances: Dictionary[Vector2i, BaseTrainTrackSegment] = {}
 
 func getDirectionMapsFromPackedScene(packed_scene: PackedScene) -> Array[Dictionary]:
 	var return_value: Array[Dictionary] = []
@@ -62,6 +63,7 @@ func loadTrackSegmentToDirectionMap() -> void:
 	# 	var segments_list = []
 
 	# 	for segment_id in Enums.TrackSegmentType.values():
+
 
 func getSocketDirectionsFromRelativePosition(relative_position: Enums.RelativePosition) -> Array[Enums.TrainDirection]:
 	if relative_position == Enums.RelativePosition.NORTH:
@@ -134,6 +136,30 @@ func checkIfTwoSegmentsAreConnectedOrCompatible(segment_1_type: Enums.TrackSegme
 		"connected": compatible and not disconnected
 	}
 
+
+func registerSegment(location: Vector2i, segment: BaseTrainTrackSegment):
+	segmentInstances[location] = segment
+
+	onSegmentRegistration(location, segment)
+
+func onSegmentRegistration(location: Vector2i, segment: BaseTrainTrackSegment):
+	if location == Vector2i(0, -1):
+		makeSegment2TheExitSegmentOfSegment1(
+			segmentInstances[Vector2i(-1, -1)],
+			segmentInstances[Vector2i(0, -1)],
+			Enums.RelativePosition.EAST
+		)
+
+	print("Placed Segment %s at position %s" % [segment.name, location])
+
+
+func makeSegment2TheExitSegmentOfSegment1(segment_1_scene: BaseTrainTrackSegment, segment_2_scene: BaseTrainTrackSegment, relative_position: Enums.RelativePosition):
+	var socket_directions = getSocketDirectionsFromRelativePosition(relative_position)
+	
+	for socket_direction in socket_directions:
+		if socket_direction in segment_1_scene.exitDirectionToNextTrainTrackSegmentMap:
+			segment_1_scene.exitDirectionToNextTrainTrackSegmentMap[socket_direction] = segment_2_scene
+
 # func checkIfTwoSegmentsAreConnected(segment_1_type: Enums.TrackSegmentType, segment_1: int, segment_2_type: Enums.TrackSegmentType, segment_2: int, relative_position_of_segment_2_to_segment_1: Enums.RelativePosition) -> bool:
 # 	var sockets_dict = getEntryAndExitSocketsForRelativePosition(segment_1_type, segment_1, segment_2_type, segment_2, relative_position_of_segment_2_to_segment_1)
 
@@ -147,20 +173,13 @@ func checkIfTwoSegmentsAreConnectedOrCompatible(segment_1_type: Enums.TrackSegme
 func placeSegment(segment_type: Enums.TrackSegmentType, segment: int, segment_position: Vector2i) -> void:
 	self.set_cell(segment_position, segment_type, Vector2i(0, 0), segment)
 
+	# var segment_scene = self.tile_map_data
+
+
 func _ready() -> void:
 	loadTrackSegmentToDirectionMap()
 
 	# print(trackSegmentToDirectionMap)
-
-	var return_dict = checkIfTwoSegmentsAreConnectedOrCompatible(
-		Enums.TrackSegmentType.STATION_TRACK_SEGMENT,
-		Enums.StationTrackSegment.EAST_ENTRY_TERMINATING,
-		Enums.TrackSegmentType.REGULAR_TRACK_SEGMENT,
-		Enums.RegularTrackSegment.EAST_TO_WEST,
-		Enums.RelativePosition.EAST
-	)
-
-	print("Compatible: %s, Connected: %s" % [return_dict.compatible, return_dict.connected])
 
 	placeSegment(
 		Enums.TrackSegmentType.REGULAR_TRACK_SEGMENT,
@@ -168,24 +187,46 @@ func _ready() -> void:
 		Vector2i(-1, -1)
 	)
 
-	print(
-		trackSegmentToDirectionMap[Enums.TrackSegmentType.SWITCHING_TRACK_SEGMENT][Enums.SwitchingTrackSegment.EAST_TO_WEST_AND_NORTH_TO_WEST]
-	)
-
 	placeSegment(
-		Enums.TrackSegmentType.SINGULAR_TRACK_SEGMENT, 
-		Enums.SingularTrackSegment.HORIZONTAL_FOLLOWING_TO_OPPOSING,
+		Enums.TrackSegmentType.REGULAR_TRACK_SEGMENT,
+		Enums.RegularTrackSegment.EAST_TO_WEST,
 		Vector2i(0, -1)
 	)
 
-	placeSegment(
-		Enums.TrackSegmentType.STATION_TRACK_SEGMENT,
-		Enums.StationTrackSegment.NORTH_ENTRY_TERMINATING,
-		Vector2i(-1, 0)
-	)
+	# var return_dict = checkIfTwoSegmentsAreConnectedOrCompatible(
+	# 	Enums.TrackSegmentType.STATION_TRACK_SEGMENT,
+	# 	Enums.StationTrackSegment.EAST_ENTRY_TERMINATING,
+	# 	Enums.TrackSegmentType.REGULAR_TRACK_SEGMENT,
+	# 	Enums.RegularTrackSegment.EAST_TO_WEST,
+	# 	Enums.RelativePosition.EAST
+	# )
 
-	placeSegment(
-		Enums.TrackSegmentType.SWITCHING_TRACK_SEGMENT,
-		Enums.SwitchingTrackSegment.EAST_TO_WEST_AND_NORTH_TO_WEST,
-		Vector2i(0, 0)
-	)
+	# print("Compatible: %s, Connected: %s" % [return_dict.compatible, return_dict.connected])
+
+	# placeSegment(
+	# 	Enums.TrackSegmentType.REGULAR_TRACK_SEGMENT,
+	# 	Enums.RegularTrackSegment.EAST_TO_WEST,
+	# 	Vector2i(-1, -1)
+	# )
+
+	# print(
+	# 	trackSegmentToDirectionMap[Enums.TrackSegmentType.SWITCHING_TRACK_SEGMENT][Enums.SwitchingTrackSegment.EAST_TO_WEST_AND_NORTH_TO_WEST]
+	# )
+
+	# placeSegment(
+	# 	Enums.TrackSegmentType.SINGULAR_TRACK_SEGMENT, 
+	# 	Enums.SingularTrackSegment.HORIZONTAL_FOLLOWING_TO_OPPOSING,
+	# 	Vector2i(0, -1)
+	# )
+
+	# placeSegment(
+	# 	Enums.TrackSegmentType.STATION_TRACK_SEGMENT,
+	# 	Enums.StationTrackSegment.NORTH_ENTRY_TERMINATING,
+	# 	Vector2i(-1, 0)
+	# )
+
+	# placeSegment(
+	# 	Enums.TrackSegmentType.SWITCHING_TRACK_SEGMENT,
+	# 	Enums.SwitchingTrackSegment.EAST_TO_WEST_AND_NORTH_TO_WEST,
+	# 	Vector2i(0, 0)
+	# )

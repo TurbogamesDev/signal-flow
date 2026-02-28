@@ -17,6 +17,8 @@ func enableSegment(train_track_segment: BaseTrainTrackSegment):
 	trainTrackPieces = currentTrainTrackSegment.trainTrackPieces
 
 func _ready() -> void:
+	super()
+
 	for train_track_segment in trainTrackSegments:
 		train_track_segment.hideSegment()
 

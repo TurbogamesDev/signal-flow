@@ -10,3 +10,6 @@ zoomFactor = 1.1
 
 [node name="TrackSegmentGrid" parent="." unique_id=2026210649 instance=ExtResource("2_qplxx")]
 tile_map_data = PackedByteArray("AAD9/wIAAgAAAAAAAgD+/wIAAwAAAAAACAD///7/AAAAAAAABAD/////AAAAAAAAAQD//wAAAAAAAAAAAgD//wIAAAAAAAAAAAAAAP7/AgAAAAAAAAAAAAAAAwAAAAAAAgAAAAEAAgAAAAAAAQAAAAIAAAAAAAAAAwABAP7/AwAAAAAACAABAAAAAwAAAAAACAACAP7/AgAAAAAAAgACAAAAAgAAAAAABQA=")
+enabled = false
+
+[node name="TrackSegmentGrid2" parent="." unique_id=604433150 instance=ExtResource("2_qplxx")]

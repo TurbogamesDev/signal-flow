@@ -9,4 +9,6 @@ func inheritPropertiesOfTrainTrackSegment():
 	trainTrackPieces = entryTrainTrackSegment.trainTrackPieces
 
 func _ready() -> void:
+	super()
+
 	inheritPropertiesOfTrainTrackSegment()

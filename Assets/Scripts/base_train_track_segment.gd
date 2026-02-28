@@ -15,6 +15,18 @@ const SHOWN_Z_INDEX = 0
 const SHOWN_COLOR: Color = Color(1, 1, 1) 
 const HIDDEN_COLOR: Color = Color(0.5, 0.5, 0.5)
 
+func _ready() -> void:
+    var track_segment_grid = get_parent()
+
+    if track_segment_grid is TrackSegmentGrid:
+        track_segment_grid.registerSegment(
+            track_segment_grid.local_to_map(position),
+            self
+        )
+        
+
+
+
 func hideSegment():
     for train_track_piece in trainTrackPieces:
         train_track_piece.default_color = HIDDEN_COLOR
