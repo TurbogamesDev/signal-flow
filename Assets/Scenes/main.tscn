@@ -1,6 +1,8 @@
 [gd_scene format=4 uid="uid://fdrxtvto2fgg"]
 
 [ext_resource type="PackedScene" uid="uid://dhxahw6xlbcct" path="res://Assets/Scenes/track_segment_grid.tscn" id="2_qplxx"]
+[ext_resource type="PackedScene" uid="uid://uof2mkd5iamg" path="res://Assets/Scenes/Track_Segments/Regular_Track_Segments/Straight_Track_Segments/east_to_west_train_track_segment.tscn" id="3_guoxd"]
+[ext_resource type="PackedScene" uid="uid://d0swi8sb81sqg" path="res://Assets/Scenes/train.tscn" id="4_rvsrt"]
 [ext_resource type="PackedScene" uid="uid://chclxkeh881js" path="res://Assets/Scenes/pannable_camera.tscn" id="12_ttgh6"]
 
 [node name="Main" type="Node2D" unique_id=521555461]
@@ -9,7 +11,24 @@
 zoomFactor = 1.1
 
 [node name="TrackSegmentGrid" parent="." unique_id=2026210649 instance=ExtResource("2_qplxx")]
-tile_map_data = PackedByteArray("AAD9/wIAAgAAAAAAAgD+/wIAAwAAAAAACAD///7/AAAAAAAABAD/////AAAAAAAAAQD//wAAAAAAAAAAAgD//wIAAAAAAAAAAAAAAP7/AgAAAAAAAAAAAAAAAwAAAAAAAgAAAAEAAgAAAAAAAQAAAAIAAAAAAAAAAwABAP7/AwAAAAAACAABAAAAAwAAAAAACAACAP7/AgAAAAAAAgACAAAAAgAAAAAABQA=")
+tile_map_data = PackedByteArray("AAD9/wIAAgAAAAAAAgD+/wIAAwAAAAAACAD//wAAAAAAAAAAAgAAAAAAAwAAAAAAAgAAAAEAAgAAAAAAAQAAAAIAAAAAAAAAAwABAAAAAwAAAAAACAACAAAAAgAAAAAABQD/////AwAAAAAACQD///7/AgAAAAAABAA=")
+
+[node name="EastToWest_TrainTrackSegment" parent="TrackSegmentGrid" unique_id=2085642467 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("3_guoxd")]
+position = Vector2(-96, 480)
+exitDirectionToNextTrainTrackSegmentMap = {
+2: null,
+3: null
+}
+entryDirectionToTrainTrackPieceMap = {
+2: NodePath("TrainTrackPieces/TrainTrackPiece_1"),
+3: NodePath("TrainTrackPieces/TrainTrackPiece_2")
+}
 
 [node name="TrackSegmentGrid2" parent="." unique_id=604433150 instance=ExtResource("2_qplxx")]
 enabled = false
+
+[node name="Train" parent="." unique_id=1649803757 node_paths=PackedStringArray("currentTrainTrackSegment") instance=ExtResource("4_rvsrt")]
+position = Vector2(-102.61206, 608.94696)
+maxSpeed = 96.0
+currentTrainTrackSegment = NodePath("../TrackSegmentGrid/EastToWest_TrainTrackSegment")
+currentDirection = 2

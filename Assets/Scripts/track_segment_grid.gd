@@ -1,7 +1,7 @@
 extends TileMapLayer
 class_name TrackSegmentGrid
 
-var trackSegmentToDirectionMap = []
+var trackSegmentToDirectionMaps = []
 var segmentInstances: Dictionary[Vector2i, BaseTrainTrackSegment] = {}
 
 const RELATIVE_POSITION_TO_LOCATION_OFFSET: Dictionary[Enums.RelativePosition, Vector2i] = {
@@ -10,6 +10,7 @@ const RELATIVE_POSITION_TO_LOCATION_OFFSET: Dictionary[Enums.RelativePosition, V
 	Enums.RelativePosition.EAST: Vector2i(1, 0),
 	Enums.RelativePosition.WEST: Vector2i(-1, 0)
 }
+
 const RELATIVE_POSITION_TO_SOCKET_DIRECTIONS: Dictionary[Enums.RelativePosition, Array] = {
 	Enums.RelativePosition.NORTH: [
 		Enums.TrainDirection.NORTH_FOLLOWING,
@@ -29,22 +30,32 @@ const RELATIVE_POSITION_TO_SOCKET_DIRECTIONS: Dictionary[Enums.RelativePosition,
 	]
 }
 
-func getDirectionMapsFromPackedScene(packed_scene: PackedScene) -> Array[Dictionary]:
+const RELATIVE_POSITION_TO_OPPOSITE_RELATIVE_POSITION: Dictionary[Enums.RelativePosition, Enums.RelativePosition] = {
+	Enums.RelativePosition.NORTH: Enums.RelativePosition.SOUTH,
+	Enums.RelativePosition.SOUTH: Enums.RelativePosition.NORTH,
+	Enums.RelativePosition.EAST: Enums.RelativePosition.WEST,
+	Enums.RelativePosition.WEST: Enums.RelativePosition.EAST
+}
+
+func getDirectionMapsFromSegment(segment: BaseTrainTrackSegment) -> Array[Dictionary]:
 	var return_value: Array[Dictionary] = []
 
-	var track_segment_node = packed_scene.instantiate()
-	assert(track_segment_node is BaseTrainTrackSegment)
+	# var track_segment_node = packed_scene.instantiate()
+	# assert(track_segment_node is BaseTrainTrackSegment)
 
-	var root_direction_map = track_segment_node.get("directionMap")
+	var root_direction_map = segment.get("directionMap")
 
 	if root_direction_map:
 		return_value.append(root_direction_map)
 
-		track_segment_node.queue_free()
+		# return return_value
 
+	var child_track_segments_node = segment.get_node_or_null("TrainTrackSegments")
+
+	if not child_track_segments_node:
 		return return_value
 
-	var child_track_segments = track_segment_node.get_node("TrainTrackSegments").get_children()
+	var child_track_segments = child_track_segments_node.get_children()
 
 	for child in child_track_segments:
 		var child_direction_map = child.get("directionMap")
@@ -54,7 +65,17 @@ func getDirectionMapsFromPackedScene(packed_scene: PackedScene) -> Array[Diction
 
 		return_value.append(child_direction_map)
 
-	track_segment_node.free()
+	return return_value
+
+func getDirectionMapsFromPackedScene(packed_scene: PackedScene) -> Array[Dictionary]:
+	var return_value: Array[Dictionary] = []
+
+	var track_segment_node = packed_scene.instantiate()
+	assert(track_segment_node is BaseTrainTrackSegment)
+
+	return_value = getDirectionMapsFromSegment(track_segment_node)
+
+	track_segment_node.queue_free()
 
 	return return_value
 
@@ -67,11 +88,11 @@ func getDirectionMapsFromSegmentTypeAndSegment(segment_type: Enums.TrackSegmentT
 
 	return direction_maps
 
-func loadTrackSegmentToDirectionMap() -> void:
+func loadTrackSegmentToDirectionMaps() -> void:
 	var source_count = tile_set.get_source_count()
 
 	for source_id in range(source_count):
-		trackSegmentToDirectionMap.append([])
+		trackSegmentToDirectionMaps.append([])
 
 		var source: TileSetScenesCollectionSource = tile_set.get_source(source_id)
 
@@ -80,7 +101,7 @@ func loadTrackSegmentToDirectionMap() -> void:
 		for scene_id in range(scene_count):
 			var direction_maps = getDirectionMapsFromSegmentTypeAndSegment(source_id, scene_id)
 
-			trackSegmentToDirectionMap[source_id].append(direction_maps)
+			trackSegmentToDirectionMaps[source_id].append(direction_maps)
 
 
 
@@ -92,9 +113,9 @@ func loadTrackSegmentToDirectionMap() -> void:
 	# 	for segment_id in Enums.TrackSegmentType.values():
 
 
-func getEntryAndExitSocketsForRelativePosition(segment_1_type: Enums.TrackSegmentType, segment_1: int, segment_2_type: Enums.TrackSegmentType, segment_2: int, relative_position_of_segment_2_to_segment_1: Enums.RelativePosition) -> Dictionary[String, Array]:
-	var direction_maps_1 = trackSegmentToDirectionMap[segment_1_type][segment_1]
-	var direction_maps_2 = trackSegmentToDirectionMap[segment_2_type][segment_2]
+func getEntryAndExitSocketsForRelativePosition(direction_maps_1: Array[Dictionary], direction_maps_2: Array[Dictionary], relative_position_of_segment_2_to_segment_1: Enums.RelativePosition) -> Dictionary[String, Array]:
+	# var direction_maps_1 = trackSegmentToDirectionMap[segment_1_type][segment_1]
+	# var direction_maps_2 = trackSegmentToDirectionMap[segment_2_type][segment_2]
 	
 	var exit_directions_of_segment_1 = []
 
@@ -129,13 +150,13 @@ func getEntryAndExitSocketsForRelativePosition(segment_1_type: Enums.TrackSegmen
 		"segment_2_entry_socket": segment_2_entry_socket
 	}
 
-func checkIfTwoSegmentsAreConnectedOrCompatible(segment_1_type: Enums.TrackSegmentType, segment_1: int, segment_2_type: Enums.TrackSegmentType, segment_2: int, relative_position_of_segment_2_to_segment_1: Enums.RelativePosition) -> Dictionary[String, bool]:
-	var sockets_dict = getEntryAndExitSocketsForRelativePosition(segment_1_type, segment_1, segment_2_type, segment_2, relative_position_of_segment_2_to_segment_1)
+func checkIfTwoSegmentsAreConnectedOrCompatible(direction_maps_1: Array[Dictionary], direction_maps_2: Array[Dictionary], relative_position_of_segment_2_to_segment_1: Enums.RelativePosition) -> Dictionary[String, bool]:
+	var sockets_dict = getEntryAndExitSocketsForRelativePosition(direction_maps_1, direction_maps_2, relative_position_of_segment_2_to_segment_1)
 
 	var segment_1_exit_socket = sockets_dict["segment_1_exit_socket"]
 	var segment_2_entry_socket = sockets_dict["segment_2_entry_socket"]
 
-	var compatible: bool = (segment_1_exit_socket == segment_2_entry_socket)
+	var compatible: bool = ( (segment_1_exit_socket != []) and (segment_2_entry_socket != []) ) or ((segment_1_exit_socket == []) and (segment_2_entry_socket == []))
 	var disconnected: bool = (segment_1_exit_socket == []) or (segment_2_entry_socket == [])
 
 	return {
@@ -150,6 +171,8 @@ func registerSegment(location: Vector2i, segment: BaseTrainTrackSegment) -> void
 	onSegmentRegistration(location, segment)
 
 func onSegmentRegistration(location: Vector2i, segment: BaseTrainTrackSegment):
+	updateExitDirectionsOfSegmentAndNeighbours(location, segment)
+
 	print(getSegmentsNeighbouringSegmentLocation(location))
 
 	print("Placed Segment %s at position %s" % [segment.name, location])
@@ -178,6 +201,32 @@ func makeSegment2TheExitSegmentOfSegment1(segment_1_scene: BaseTrainTrackSegment
 		
 		segment_1_scene.exitDirectionToNextTrainTrackSegmentMap[socket_direction] = segment_2_scene
 
+func updateExitDirectionsOfSegmentAndNeighbours(location: Vector2i, segment: BaseTrainTrackSegment):
+	var neighbouring_segments = getSegmentsNeighbouringSegmentLocation(location)
+
+	for relative_position in neighbouring_segments:
+		var neighbouring_segment = neighbouring_segments[relative_position]
+
+		if not neighbouring_segment:
+			continue
+
+		var connected = checkIfTwoSegmentsAreConnectedOrCompatible(
+			getDirectionMapsFromSegment(segment),
+			getDirectionMapsFromSegment(neighbouring_segment),
+			relative_position
+		).connected
+
+		if not connected:
+			continue
+
+
+		makeSegment2TheExitSegmentOfSegment1(segment, neighbouring_segment, relative_position)
+
+		makeSegment2TheExitSegmentOfSegment1(neighbouring_segment, segment, RELATIVE_POSITION_TO_OPPOSITE_RELATIVE_POSITION[relative_position])
+
+		
+
+
 # func checkIfTwoSegmentsAreConnected(segment_1_type: Enums.TrackSegmentType, segment_1: int, segment_2_type: Enums.TrackSegmentType, segment_2: int, relative_position_of_segment_2_to_segment_1: Enums.RelativePosition) -> bool:
 # 	var sockets_dict = getEntryAndExitSocketsForRelativePosition(segment_1_type, segment_1, segment_2_type, segment_2, relative_position_of_segment_2_to_segment_1)
 
@@ -195,21 +244,21 @@ func placeSegment(segment_type: Enums.TrackSegmentType, segment: int, segment_po
 
 
 func _ready() -> void:
-	loadTrackSegmentToDirectionMap()
+	loadTrackSegmentToDirectionMaps()
 
 	# print(trackSegmentToDirectionMap)
 
-	placeSegment(
-		Enums.TrackSegmentType.REGULAR_TRACK_SEGMENT,
-		Enums.RegularTrackSegment.EAST_TO_WEST,
-		Vector2i(-1, -1)
-	)
+	# placeSegment(
+	# 	Enums.TrackSegmentType.REGULAR_TRACK_SEGMENT,
+	# 	Enums.RegularTrackSegment.EAST_TO_WEST,
+	# 	Vector2i(-1, -1)
+	# )
 
-	placeSegment(
-		Enums.TrackSegmentType.REGULAR_TRACK_SEGMENT,
-		Enums.RegularTrackSegment.EAST_TO_WEST,
-		Vector2i(0, -1)
-	)
+	# placeSegment(
+	# 	Enums.TrackSegmentType.REGULAR_TRACK_SEGMENT,
+	# 	Enums.RegularTrackSegment.EAST_TO_WEST,
+	# 	Vector2i(0, -1)
+	# )
 
 	# var return_dict = checkIfTwoSegmentsAreConnectedOrCompatible(
 	# 	Enums.TrackSegmentType.STATION_TRACK_SEGMENT,
