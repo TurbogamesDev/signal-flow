@@ -4,6 +4,31 @@ class_name TrackSegmentGrid
 var trackSegmentToDirectionMap = []
 var segmentInstances: Dictionary[Vector2i, BaseTrainTrackSegment] = {}
 
+const RELATIVE_POSITION_TO_LOCATION_OFFSET: Dictionary[Enums.RelativePosition, Vector2i] = {
+	Enums.RelativePosition.NORTH: Vector2i(0, -1),
+	Enums.RelativePosition.SOUTH: Vector2i(0, 1),
+	Enums.RelativePosition.EAST: Vector2i(1, 0),
+	Enums.RelativePosition.WEST: Vector2i(-1, 0)
+}
+const RELATIVE_POSITION_TO_SOCKET_DIRECTIONS: Dictionary[Enums.RelativePosition, Array] = {
+	Enums.RelativePosition.NORTH: [
+		Enums.TrainDirection.NORTH_FOLLOWING,
+		Enums.TrainDirection.NORTH_OPPOSING
+	],
+	Enums.RelativePosition.SOUTH: [
+		Enums.TrainDirection.SOUTH_FOLLOWING,
+		Enums.TrainDirection.SOUTH_OPPOSING
+	],
+	Enums.RelativePosition.EAST: [
+		Enums.TrainDirection.EAST_FOLLOWING,
+		Enums.TrainDirection.EAST_OPPOSING
+	],
+	Enums.RelativePosition.WEST: [
+		Enums.TrainDirection.WEST_FOLLOWING,
+		Enums.TrainDirection.WEST_OPPOSING
+	]
+}
+
 func getDirectionMapsFromPackedScene(packed_scene: PackedScene) -> Array[Dictionary]:
 	var return_value: Array[Dictionary] = []
 
@@ -24,8 +49,10 @@ func getDirectionMapsFromPackedScene(packed_scene: PackedScene) -> Array[Diction
 	for child in child_track_segments:
 		var child_direction_map = child.get("directionMap")
 
-		if child_direction_map:
-			return_value.append(child_direction_map)
+		if not child_direction_map:
+			continue
+
+		return_value.append(child_direction_map)
 
 	track_segment_node.free()
 
@@ -65,30 +92,6 @@ func loadTrackSegmentToDirectionMap() -> void:
 	# 	for segment_id in Enums.TrackSegmentType.values():
 
 
-func getSocketDirectionsFromRelativePosition(relative_position: Enums.RelativePosition) -> Array[Enums.TrainDirection]:
-	if relative_position == Enums.RelativePosition.NORTH:
-		return [
-			Enums.TrainDirection.NORTH_FOLLOWING,
-			Enums.TrainDirection.NORTH_OPPOSING
-		]
-	elif relative_position == Enums.RelativePosition.SOUTH:
-		return [
-			Enums.TrainDirection.SOUTH_FOLLOWING,
-			Enums.TrainDirection.SOUTH_OPPOSING
-		]
-	elif relative_position == Enums.RelativePosition.EAST:
-		return [
-			Enums.TrainDirection.EAST_FOLLOWING,
-			Enums.TrainDirection.EAST_OPPOSING
-		]
-	elif relative_position == Enums.RelativePosition.WEST:
-		return [
-			Enums.TrainDirection.WEST_FOLLOWING,
-			Enums.TrainDirection.WEST_OPPOSING
-		]
-	else:
-		return []
-
 func getEntryAndExitSocketsForRelativePosition(segment_1_type: Enums.TrackSegmentType, segment_1: int, segment_2_type: Enums.TrackSegmentType, segment_2: int, relative_position_of_segment_2_to_segment_1: Enums.RelativePosition) -> Dictionary[String, Array]:
 	var direction_maps_1 = trackSegmentToDirectionMap[segment_1_type][segment_1]
 	var direction_maps_2 = trackSegmentToDirectionMap[segment_2_type][segment_2]
@@ -98,12 +101,14 @@ func getEntryAndExitSocketsForRelativePosition(segment_1_type: Enums.TrackSegmen
 	for direction_map in direction_maps_1:
 		exit_directions_of_segment_1.append_array(direction_map.values())
 	
+
 	var entry_directions_of_segment_2 = []
 
 	for direction_map in direction_maps_2:
 		entry_directions_of_segment_2.append_array(direction_map.keys())
 	
-	var socket_directions = getSocketDirectionsFromRelativePosition(relative_position_of_segment_2_to_segment_1)
+
+	var socket_directions = RELATIVE_POSITION_TO_SOCKET_DIRECTIONS[relative_position_of_segment_2_to_segment_1]
 
 	var segment_1_exit_socket = []
 	
@@ -111,11 +116,13 @@ func getEntryAndExitSocketsForRelativePosition(segment_1_type: Enums.TrackSegmen
 		if direction in exit_directions_of_segment_1:
 			segment_1_exit_socket.append(direction)
 
+
 	var segment_2_entry_socket = []
 	
 	for direction in socket_directions:
 		if direction in entry_directions_of_segment_2:
 			segment_2_entry_socket.append(direction)
+
 
 	return {
 		"segment_1_exit_socket": segment_1_exit_socket,
@@ -137,28 +144,39 @@ func checkIfTwoSegmentsAreConnectedOrCompatible(segment_1_type: Enums.TrackSegme
 	}
 
 
-func registerSegment(location: Vector2i, segment: BaseTrainTrackSegment):
+func registerSegment(location: Vector2i, segment: BaseTrainTrackSegment) -> void:
 	segmentInstances[location] = segment
 
 	onSegmentRegistration(location, segment)
 
 func onSegmentRegistration(location: Vector2i, segment: BaseTrainTrackSegment):
-	if location == Vector2i(0, -1):
-		makeSegment2TheExitSegmentOfSegment1(
-			segmentInstances[Vector2i(-1, -1)],
-			segmentInstances[Vector2i(0, -1)],
-			Enums.RelativePosition.EAST
-		)
+	print(getSegmentsNeighbouringSegmentLocation(location))
 
 	print("Placed Segment %s at position %s" % [segment.name, location])
 
 
+func getSegmentsNeighbouringSegmentLocation(location: Vector2i) -> Dictionary[Enums.RelativePosition, BaseTrainTrackSegment]:
+	var return_value: Dictionary[Enums.RelativePosition, BaseTrainTrackSegment] = {}
+
+	for relative_position in Enums.RelativePosition.values():
+		var location_offset = RELATIVE_POSITION_TO_LOCATION_OFFSET[relative_position]
+
+		var new_location = location + location_offset
+
+		var segment = segmentInstances.get(new_location)
+
+		return_value[relative_position] = segment
+
+	return return_value
+
 func makeSegment2TheExitSegmentOfSegment1(segment_1_scene: BaseTrainTrackSegment, segment_2_scene: BaseTrainTrackSegment, relative_position: Enums.RelativePosition):
-	var socket_directions = getSocketDirectionsFromRelativePosition(relative_position)
+	var socket_directions = RELATIVE_POSITION_TO_SOCKET_DIRECTIONS[relative_position]
 	
 	for socket_direction in socket_directions:
-		if socket_direction in segment_1_scene.exitDirectionToNextTrainTrackSegmentMap:
-			segment_1_scene.exitDirectionToNextTrainTrackSegmentMap[socket_direction] = segment_2_scene
+		if not (socket_direction in segment_1_scene.exitDirectionToNextTrainTrackSegmentMap):
+			continue
+		
+		segment_1_scene.exitDirectionToNextTrainTrackSegmentMap[socket_direction] = segment_2_scene
 
 # func checkIfTwoSegmentsAreConnected(segment_1_type: Enums.TrackSegmentType, segment_1: int, segment_2_type: Enums.TrackSegmentType, segment_2: int, relative_position_of_segment_2_to_segment_1: Enums.RelativePosition) -> bool:
 # 	var sockets_dict = getEntryAndExitSocketsForRelativePosition(segment_1_type, segment_1, segment_2_type, segment_2, relative_position_of_segment_2_to_segment_1)
