@@ -1,7 +1,7 @@
 extends TileMapLayer
 class_name TrackSegmentGrid
 
-var trackSegmentToDirectionMaps = []
+var trackSegmentToDirectionMaps = [] # Array[Array[Dictionary[Enums.TrainDirection, Enums.TrainDirection]]]
 var segmentInstances: Dictionary[Vector2i, BaseTrainTrackSegment] = {}
 
 const RELATIVE_POSITION_TO_LOCATION_OFFSET: Dictionary[Enums.RelativePosition, Vector2i] = {
@@ -173,7 +173,8 @@ func registerSegment(location: Vector2i, segment: BaseTrainTrackSegment) -> void
 func onSegmentRegistration(location: Vector2i, segment: BaseTrainTrackSegment):
 	updateExitDirectionsOfSegmentAndNeighbours(location, segment)
 
-	print(getSegmentsNeighbouringSegmentLocation(location))
+	if location == Vector2i(0, 1):
+		print(getAllSegmentsCompatibleWithDirectionMapsInDirection(getDirectionMapsFromSegment(segment), Enums.RelativePosition.NORTH))
 
 	print("Placed Segment %s at position %s" % [segment.name, location])
 
@@ -225,6 +226,35 @@ func updateExitDirectionsOfSegmentAndNeighbours(location: Vector2i, segment: Bas
 		makeSegment2TheExitSegmentOfSegment1(neighbouring_segment, segment, RELATIVE_POSITION_TO_OPPOSITE_RELATIVE_POSITION[relative_position])
 
 		
+func getAllSegmentsCompatibleWithDirectionMapsInDirection(direction_maps: Array[Dictionary], relative_direction: Enums.RelativePosition) -> Array:
+	var segments_compatible = []
+	
+	for checking_segment_type in range(trackSegmentToDirectionMaps.size()):
+		var checking_segments = trackSegmentToDirectionMaps[checking_segment_type]
+
+		for checking_segment in range(checking_segments.size()):
+			# print(checking_segments)
+
+			var checking_segment_direction_maps = checking_segments[checking_segment]
+
+			var compatible = checkIfTwoSegmentsAreConnectedOrCompatible(
+				direction_maps,
+				checking_segment_direction_maps, 
+				relative_direction
+			).compatible
+
+			if not compatible:
+				continue
+
+			segments_compatible.append({
+				"segment_type": checking_segment_type,
+				"segment": checking_segment
+			})
+
+	return segments_compatible
+
+func calculateTileEntropy(location: Vector2i):
+	pass
 
 
 # func checkIfTwoSegmentsAreConnected(segment_1_type: Enums.TrackSegmentType, segment_1: int, segment_2_type: Enums.TrackSegmentType, segment_2: int, relative_position_of_segment_2_to_segment_1: Enums.RelativePosition) -> bool:
@@ -234,7 +264,6 @@ func updateExitDirectionsOfSegmentAndNeighbours(location: Vector2i, segment: Bas
 # 	var segment_2_entry_socket = sockets_dict["segment_2_entry_socket"]
 
 # 	return segment_1_exit_socket == segment_2_entry_socket
-	
 
 
 func placeSegment(segment_type: Enums.TrackSegmentType, segment: int, segment_position: Vector2i) -> void:
