@@ -173,8 +173,12 @@ func registerSegment(location: Vector2i, segment: BaseTrainTrackSegment) -> void
 func onSegmentRegistration(location: Vector2i, segment: BaseTrainTrackSegment):
 	updateExitDirectionsOfSegmentAndNeighbours(location, segment)
 
-	if location == Vector2i(0, 1):
-		print(getAllSegmentsCompatibleWithDirectionMapsInDirection(getDirectionMapsFromSegment(segment), Enums.RelativePosition.NORTH))
+	print(calculateTileEntropy(Vector2i(0, 1)))
+
+	# if location == Vector2i(0, 1):
+	# 	print(calculateTileEntropy(location))
+		
+		# print(getAllSegmentsCompatibleWithDirectionMapsInDirection(getDirectionMapsFromSegment(segment), Enums.RelativePosition.NORTH))
 
 	print("Placed Segment %s at position %s" % [segment.name, location])
 
@@ -226,7 +230,7 @@ func updateExitDirectionsOfSegmentAndNeighbours(location: Vector2i, segment: Bas
 		makeSegment2TheExitSegmentOfSegment1(neighbouring_segment, segment, RELATIVE_POSITION_TO_OPPOSITE_RELATIVE_POSITION[relative_position])
 
 		
-func getAllSegmentsCompatibleWithDirectionMapsInDirection(direction_maps: Array[Dictionary], relative_direction: Enums.RelativePosition) -> Array:
+func getAllSegmentsCompatibleWithDirectionMapsInDirection(direction_maps: Array[Dictionary], relative_position: Enums.RelativePosition) -> Array:
 	var segments_compatible = []
 	
 	for checking_segment_type in range(trackSegmentToDirectionMaps.size()):
@@ -240,7 +244,7 @@ func getAllSegmentsCompatibleWithDirectionMapsInDirection(direction_maps: Array[
 			var compatible = checkIfTwoSegmentsAreConnectedOrCompatible(
 				direction_maps,
 				checking_segment_direction_maps, 
-				relative_direction
+				relative_position
 			).compatible
 
 			if not compatible:
@@ -253,8 +257,55 @@ func getAllSegmentsCompatibleWithDirectionMapsInDirection(direction_maps: Array[
 
 	return segments_compatible
 
-func calculateTileEntropy(location: Vector2i):
-	pass
+func calculateTileEntropy(location: Vector2i) -> Dictionary[String, Variant]:
+	var neighbouring_segments: Dictionary[Enums.RelativePosition, BaseTrainTrackSegment] = getSegmentsNeighbouringSegmentLocation(location)
+
+	var valid_segments: Array = []
+	var no_segment_valid = false
+
+	for relative_position in neighbouring_segments:
+		var neighbouring_segment = neighbouring_segments[relative_position]
+
+		if not neighbouring_segment:
+			continue
+
+		var valid_segments_for_relative_position = getAllSegmentsCompatibleWithDirectionMapsInDirection(
+			getDirectionMapsFromSegment(neighbouring_segment),
+			RELATIVE_POSITION_TO_OPPOSITE_RELATIVE_POSITION[relative_position]
+		)
+
+		if valid_segments_for_relative_position == []:
+			no_segment_valid = true
+
+			break
+
+		if not valid_segments:
+			valid_segments = valid_segments_for_relative_position
+
+			continue
+
+		var new_valid_segments = valid_segments.duplicate_deep()
+
+		for valid_segment in valid_segments:
+			if valid_segment in valid_segments_for_relative_position:
+				continue
+
+			new_valid_segments.erase(valid_segment)
+
+		valid_segments = new_valid_segments
+
+		if not valid_segments:
+			no_segment_valid = true
+
+			break
+
+	return {
+		"valid_segments": valid_segments,
+		"no_segment_valid": no_segment_valid
+	}
+
+
+
 
 
 # func checkIfTwoSegmentsAreConnected(segment_1_type: Enums.TrackSegmentType, segment_1: int, segment_2_type: Enums.TrackSegmentType, segment_2: int, relative_position_of_segment_2_to_segment_1: Enums.RelativePosition) -> bool:
