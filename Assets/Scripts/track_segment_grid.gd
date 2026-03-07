@@ -3,6 +3,7 @@ class_name TrackSegmentGrid
 
 var trackSegmentToDirectionMaps = [] # Array[Array[Dictionary[Enums.TrainDirection, Enums.TrainDirection]]]
 var segmentInstances: Dictionary[Vector2i, BaseTrainTrackSegment] = {}
+var entropyLookupTable: Dictionary[Vector2i, Dictionary] = {}
 
 const RELATIVE_POSITION_TO_LOCATION_OFFSET: Dictionary[Enums.RelativePosition, Vector2i] = {
 	Enums.RelativePosition.NORTH: Vector2i(0, -1),
@@ -173,7 +174,7 @@ func registerSegment(location: Vector2i, segment: BaseTrainTrackSegment) -> void
 func onSegmentRegistration(location: Vector2i, segment: BaseTrainTrackSegment):
 	updateExitDirectionsOfSegmentAndNeighbours(location, segment)
 
-	print(calculateTileEntropy(Vector2i(0, 1)))
+	entropyLookupTable[location] = calculateTileEntropy(location)
 
 	# if location == Vector2i(0, 1):
 	# 	print(calculateTileEntropy(location))
@@ -325,6 +326,10 @@ func placeSegment(segment_type: Enums.TrackSegmentType, segment: int, segment_po
 
 func _ready() -> void:
 	loadTrackSegmentToDirectionMaps()
+
+	await get_tree().create_timer(5).timeout
+
+	print(entropyLookupTable)
 
 	# print(trackSegmentToDirectionMap)
 
