@@ -11,7 +11,7 @@
 zoomFactor = 1.1
 
 [node name="TrackSegmentGrid" parent="." unique_id=2026210649 instance=ExtResource("2_qplxx")]
-tile_map_data = PackedByteArray("AAD9/wIAAgAAAAAAAgD+/wIAAwAAAAAACAD//wAAAAAAAAAAAgAAAAAAAwAAAAAAAgAAAAEAAgAAAAAAAQAAAAIAAAAAAAAAAwABAAAAAwAAAAAACAACAAAAAgAAAAAABQD/////AwAAAAAACQD///7/AgAAAAAABAA=")
+tile_map_data = PackedByteArray("AAD9/wIAAgAAAAAAAgD+/wIAAwAAAAAACAD//wAAAAAAAAAAAgAAAAAAAwAAAAAAAgAAAAEAAgAAAAAAAQAAAAIAAAAAAAAAAwABAAAAAwAAAAAACAACAAAAAgAAAAAABQD/////AwAAAAAACQD///7/AgAAAAAABAAAAP7/AAAAAAAAAAABAP//AAAAAAAAAQABAP7/AAAAAAAABQA=")
 
 [node name="EastToWest_TrainTrackSegment" parent="TrackSegmentGrid" unique_id=2085642467 node_paths=PackedStringArray("exitDirectionToNextTrainTrackSegmentMap", "entryDirectionToTrainTrackPieceMap") instance=ExtResource("3_guoxd")]
 position = Vector2(-96, 480)

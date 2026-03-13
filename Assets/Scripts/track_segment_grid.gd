@@ -174,7 +174,10 @@ func registerSegment(location: Vector2i, segment: BaseTrainTrackSegment) -> void
 func onSegmentRegistration(location: Vector2i, segment: BaseTrainTrackSegment):
 	updateExitDirectionsOfSegmentAndNeighbours(location, segment)
 
-	entropyLookupTable[location] = calculateTileEntropy(location)
+	triggerEntropyCalculation(location)
+
+
+
 
 	# if location == Vector2i(0, 1):
 	# 	print(calculateTileEntropy(location))
@@ -305,6 +308,29 @@ func calculateTileEntropy(location: Vector2i) -> Dictionary[String, Variant]:
 		"no_segment_valid": no_segment_valid
 	}
 
+func triggerEntropyCalculation(location: Vector2i):
+	print("currently in %s" % location)
+
+	var original_tile_entropy = entropyLookupTable.get(
+		location,
+		{
+			"valid_segments": [],
+			"no_segment_valid": false 
+		}
+	)
+	var new_tile_entropy = calculateTileEntropy(location)
+
+	entropyLookupTable[location] = new_tile_entropy
+
+	if new_tile_entropy == original_tile_entropy:
+		return
+
+	print("entropy changed")
+
+	for location_offset in RELATIVE_POSITION_TO_LOCATION_OFFSET.values():
+		triggerEntropyCalculation(location + location_offset)
+
+
 
 
 
@@ -329,8 +355,9 @@ func _ready() -> void:
 
 	await get_tree().create_timer(5).timeout
 
-	print(entropyLookupTable)
-
+	# print("a")
+	# print(entropyLookupTable.get(Vector2i(0, -1)))
+	# print(entropyLookupTable)
 	# print(trackSegmentToDirectionMap)
 
 	# placeSegment(
