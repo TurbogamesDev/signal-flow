@@ -30,7 +30,7 @@
 [ext_resource type="PackedScene" uid="uid://0moh5vlxk4jx" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Two_Way_Track_Segments/north_to_south_and_south_to_east_switching_train_track_segment.tscn" id="27_ekj3s"]
 [ext_resource type="PackedScene" uid="uid://bcl7x3epe584" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Two_Way_Track_Segments/north_to_south_and_south_to_west_switching_train_track_segment.tscn" id="28_2urn7"]
 [ext_resource type="PackedScene" uid="uid://d10b6gac1yc5p" path="res://Assets/Scenes/Track_Segments/Switching_Track_Segments/Double_Crossover_Track_Segments/horizontal_double_crossover_switching_train_track_segment.tscn" id="29_t2s41"]
-[ext_resource type="Script" uid="uid://dygcbt7qihc63" path="res://Assets/Scripts/track_segment_grid.gd" id="31_q3vy2"]
+[ext_resource type="Script" uid="uid://dygcbt7qihc63" path="res://Assets/Scripts/track_segment_grid_scripts/track_segment_grid.gd" id="31_q3vy2"]
 
 [sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_ttgh6"]
 resource_name = "Regular_Track_Segments"

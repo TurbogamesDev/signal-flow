@@ -1,6 +1,7 @@
 extends TileMapLayer
 class_name TrackSegmentGrid
 
+# change this to vector2i instead of nested arrays
 var trackSegmentToDirectionMaps = [] # Array[Array[Dictionary[Enums.TrainDirection, Enums.TrainDirection]]]
 var segmentInstances: Dictionary[Vector2i, BaseTrainTrackSegment] = {}
 var entropyLookupTable: Dictionary[Vector2i, Dictionary] = {}
