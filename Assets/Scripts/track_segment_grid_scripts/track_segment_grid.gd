@@ -3,10 +3,11 @@ class_name TrackSegmentGrid
 
 # change this to vector2i instead of nested arrays
 # var trackSegmentToDirectionMaps = [] # Array[Array[Dictionary[Enums.TrainDirection, Enums.TrainDirection]]]
-var segmentInstances: Dictionary[Vector2i, BaseTrainTrackSegment] = {}
+# var segmentInstances: Dictionary[Vector2i, BaseTrainTrackSegment] = {}
 var entropyLookupTable: Dictionary[Vector2i, Dictionary] = {}
 
 var tile_type_lookup_table: Dictionary[Vector2i, TileType] = {}
+var tile_instance_lookup_table: Dictionary[Vector2i, TileInstance] = {}
 
 const RELATIVE_POSITION_TO_LOCATION_OFFSET: Dictionary[Enums.RelativePosition, Vector2i] = {
 	Enums.RelativePosition.NORTH: Vector2i(0, -1),
@@ -183,11 +184,22 @@ func checkIfTwoSegmentsAreConnectedOrCompatible(direction_maps_1: Array[Dictiona
 		"connected": compatible and not disconnected
 	}
 
-
-func registerSegment(location: Vector2i, segment: BaseTrainTrackSegment) -> void:
-	segmentInstances[location] = segment
+func register_segment(location: Vector2i, segment: BaseTrainTrackSegment) -> void:
+	tile_instance_lookup_table[location] = TileInstance.new(
+		getDirectionMapsFromSegment(segment),
+		segment,
+		location
+	)
 
 	onSegmentRegistration(location, segment)
+
+
+# func registerSegment(location: Vector2i, segment: BaseTrainTrackSegment) -> void:
+
+
+# 	segmentInstances[location] = segment
+
+# 	onSegmentRegistration(location, segment)
 
 func onSegmentRegistration(location: Vector2i, segment: BaseTrainTrackSegment):
 	updateExitDirectionsOfSegmentAndNeighbours(location, segment)
@@ -205,17 +217,17 @@ func onSegmentRegistration(location: Vector2i, segment: BaseTrainTrackSegment):
 	print("Placed Segment %s at position %s" % [segment.name, location])
 
 
-func getSegmentsNeighbouringSegmentLocation(location: Vector2i) -> Dictionary[Enums.RelativePosition, BaseTrainTrackSegment]:
-	var return_value: Dictionary[Enums.RelativePosition, BaseTrainTrackSegment] = {}
+func getSegmentsNeighbouringSegmentLocation(location: Vector2i) -> Dictionary[Enums.RelativePosition, TileInstance]:
+	var return_value: Dictionary[Enums.RelativePosition, TileInstance] = {}
 
 	for relative_position in Enums.RelativePosition.values():
 		var location_offset = RELATIVE_POSITION_TO_LOCATION_OFFSET[relative_position]
 
 		var new_location = location + location_offset
 
-		var segment = segmentInstances.get(new_location)
+		var tile_instance = tile_instance_lookup_table.get(new_location)
 
-		return_value[relative_position] = segment
+		return_value[relative_position] = tile_instance
 
 	return return_value
 
@@ -229,17 +241,17 @@ func makeSegment2TheExitSegmentOfSegment1(segment_1_scene: BaseTrainTrackSegment
 		segment_1_scene.exitDirectionToNextTrainTrackSegmentMap[socket_direction] = segment_2_scene
 
 func updateExitDirectionsOfSegmentAndNeighbours(location: Vector2i, segment: BaseTrainTrackSegment):
-	var neighbouring_segments = getSegmentsNeighbouringSegmentLocation(location)
+	var neighbouring_tile_instances: Dictionary[Enums.RelativePosition, TileInstance] = getSegmentsNeighbouringSegmentLocation(location)
 
-	for relative_position in neighbouring_segments:
-		var neighbouring_segment = neighbouring_segments[relative_position]
+	for relative_position: Enums.RelativePosition in neighbouring_tile_instances:
+		var neighbouring_tile_instance: TileInstance = neighbouring_tile_instances[relative_position]
 
-		if not neighbouring_segment:
+		if not neighbouring_tile_instance:
 			continue
 
 		var connected = checkIfTwoSegmentsAreConnectedOrCompatible(
 			getDirectionMapsFromSegment(segment),
-			getDirectionMapsFromSegment(neighbouring_segment),
+			neighbouring_tile_instance.direction_maps,
 			relative_position
 		).connected
 
@@ -247,9 +259,9 @@ func updateExitDirectionsOfSegmentAndNeighbours(location: Vector2i, segment: Bas
 			continue
 
 
-		makeSegment2TheExitSegmentOfSegment1(segment, neighbouring_segment, relative_position)
+		makeSegment2TheExitSegmentOfSegment1(segment, neighbouring_tile_instance.segment, relative_position)
 
-		makeSegment2TheExitSegmentOfSegment1(neighbouring_segment, segment, RELATIVE_POSITION_TO_OPPOSITE_RELATIVE_POSITION[relative_position])
+		makeSegment2TheExitSegmentOfSegment1(neighbouring_tile_instance.segment, segment, RELATIVE_POSITION_TO_OPPOSITE_RELATIVE_POSITION[relative_position])
 
 		
 func getAllSegmentsCompatibleWithDirectionMapsInDirection(direction_maps: Array[Dictionary], relative_position: Enums.RelativePosition) -> Array:
@@ -299,19 +311,19 @@ func getAllSegmentsCompatibleWithDirectionMapsInDirection(direction_maps: Array[
 	return segments_compatible
 
 func calculateTileEntropy(location: Vector2i) -> Dictionary[String, Variant]:
-	var neighbouring_segments: Dictionary[Enums.RelativePosition, BaseTrainTrackSegment] = getSegmentsNeighbouringSegmentLocation(location)
+	var neighbouring_tile_instances: Dictionary[Enums.RelativePosition, TileInstance] = getSegmentsNeighbouringSegmentLocation(location)
 
 	var valid_segments: Array = []
 	var no_segment_valid = false
 
-	for relative_position in neighbouring_segments:
-		var neighbouring_segment = neighbouring_segments[relative_position]
+	for relative_position: Enums.RelativePosition in neighbouring_tile_instances:
+		var neighbouring_tile_instance: TileInstance = neighbouring_tile_instances[relative_position]
 
-		if not neighbouring_segment:
+		if not neighbouring_tile_instance:
 			continue
 
 		var valid_segments_for_relative_position = getAllSegmentsCompatibleWithDirectionMapsInDirection(
-			getDirectionMapsFromSegment(neighbouring_segment),
+			neighbouring_tile_instance.direction_maps,
 			RELATIVE_POSITION_TO_OPPOSITE_RELATIVE_POSITION[relative_position]
 		)
 
