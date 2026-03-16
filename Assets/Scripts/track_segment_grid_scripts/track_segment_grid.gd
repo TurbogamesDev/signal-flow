@@ -2,9 +2,11 @@ extends TileMapLayer
 class_name TrackSegmentGrid
 
 # change this to vector2i instead of nested arrays
-var trackSegmentToDirectionMaps = [] # Array[Array[Dictionary[Enums.TrainDirection, Enums.TrainDirection]]]
+# var trackSegmentToDirectionMaps = [] # Array[Array[Dictionary[Enums.TrainDirection, Enums.TrainDirection]]]
 var segmentInstances: Dictionary[Vector2i, BaseTrainTrackSegment] = {}
 var entropyLookupTable: Dictionary[Vector2i, Dictionary] = {}
+
+var tile_type_lookup_table: Dictionary[Vector2i, TileType] = {}
 
 const RELATIVE_POSITION_TO_LOCATION_OFFSET: Dictionary[Enums.RelativePosition, Vector2i] = {
 	Enums.RelativePosition.NORTH: Vector2i(0, -1),
@@ -90,12 +92,10 @@ func getDirectionMapsFromSegmentTypeAndSegment(segment_type: Enums.TrackSegmentT
 
 	return direction_maps
 
-func loadTrackSegmentToDirectionMaps() -> void:
+func load_tile_type_lookup_table() -> void:
 	var source_count = tile_set.get_source_count()
 
 	for source_id in range(source_count):
-		trackSegmentToDirectionMaps.append([])
-
 		var source: TileSetScenesCollectionSource = tile_set.get_source(source_id)
 
 		var scene_count = source.get_scene_tiles_count()
@@ -103,7 +103,24 @@ func loadTrackSegmentToDirectionMaps() -> void:
 		for scene_id in range(scene_count):
 			var direction_maps = getDirectionMapsFromSegmentTypeAndSegment(source_id, scene_id)
 
-			trackSegmentToDirectionMaps[source_id].append(direction_maps)
+			tile_type_lookup_table[
+				Vector2i(source_id, scene_id)
+			] = TileType.new(source_id, scene_id, direction_maps)
+
+# func loadTrackSegmentToDirectionMaps() -> void:
+# 	var source_count = tile_set.get_source_count()
+
+# 	for source_id in range(source_count):
+# 		trackSegmentToDirectionMaps.append([])
+
+# 		var source: TileSetScenesCollectionSource = tile_set.get_source(source_id)
+
+# 		var scene_count = source.get_scene_tiles_count()
+
+# 		for scene_id in range(scene_count):
+# 			var direction_maps = getDirectionMapsFromSegmentTypeAndSegment(source_id, scene_id)
+
+# 			trackSegmentToDirectionMaps[source_id].append(direction_maps)
 
 
 
@@ -238,27 +255,46 @@ func updateExitDirectionsOfSegmentAndNeighbours(location: Vector2i, segment: Bas
 func getAllSegmentsCompatibleWithDirectionMapsInDirection(direction_maps: Array[Dictionary], relative_position: Enums.RelativePosition) -> Array:
 	var segments_compatible = []
 	
-	for checking_segment_type in range(trackSegmentToDirectionMaps.size()):
-		var checking_segments = trackSegmentToDirectionMaps[checking_segment_type]
+	for checking_tile_type_id_pair: Vector2i in tile_type_lookup_table.keys():
+		var checking_tile_type: TileType = tile_type_lookup_table[checking_tile_type_id_pair]
 
-		for checking_segment in range(checking_segments.size()):
-			# print(checking_segments)
+		var checking_direction_maps = checking_tile_type.direction_maps
+		
+		var compatible = checkIfTwoSegmentsAreConnectedOrCompatible(
+			direction_maps,
+			checking_direction_maps, 
+			relative_position
+		).compatible
 
-			var checking_segment_direction_maps = checking_segments[checking_segment]
+		if not compatible:
+			continue
 
-			var compatible = checkIfTwoSegmentsAreConnectedOrCompatible(
-				direction_maps,
-				checking_segment_direction_maps, 
-				relative_position
-			).compatible
+		segments_compatible.append({
+			"segment_type": checking_tile_type_id_pair.x,
+			"segment": checking_tile_type_id_pair.y
+		})
 
-			if not compatible:
-				continue
+	# for checking_segment_type in range(trackSegmentToDirectionMaps.size()):
+	# 	var checking_segments = trackSegmentToDirectionMaps[checking_segment_type]
 
-			segments_compatible.append({
-				"segment_type": checking_segment_type,
-				"segment": checking_segment
-			})
+	# 	for checking_segment in range(checking_segments.size()):
+	# 		# print(checking_segments)
+
+	# 		var checking_segment_direction_maps = checking_segments[checking_segment]
+
+	# 		var compatible = checkIfTwoSegmentsAreConnectedOrCompatible(
+	# 			direction_maps,
+	# 			checking_segment_direction_maps, 
+	# 			relative_position
+	# 		).compatible
+
+	# 		if not compatible:
+	# 			continue
+
+	# 		segments_compatible.append({
+	# 			"segment_type": checking_segment_type,
+	# 			"segment": checking_segment
+	# 		})
 
 	return segments_compatible
 
@@ -352,7 +388,7 @@ func placeSegment(segment_type: Enums.TrackSegmentType, segment: int, segment_po
 
 
 func _ready() -> void:
-	loadTrackSegmentToDirectionMaps()
+	load_tile_type_lookup_table()
 
 	await get_tree().create_timer(5).timeout
 
