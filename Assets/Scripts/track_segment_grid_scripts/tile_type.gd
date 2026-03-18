@@ -6,11 +6,17 @@ var tile_id: int
 
 var direction_maps: Array[Dictionary] = []
 
-func _init(init_tile_type_id: int, init_tile_id: int, init_direction_maps: Array[Dictionary]) -> void:
+var resource_path: String = ""
+
+func _init(init_tile_type_id: int, init_tile_id: int, init_direction_maps: Array[Dictionary], init_resource_path: String) -> void:
     tile_type_id = init_tile_type_id
     tile_id = init_tile_id
 
     direction_maps = init_direction_maps
+
+    resource_path = init_resource_path
+
+    print(resource_path)
 
     
 

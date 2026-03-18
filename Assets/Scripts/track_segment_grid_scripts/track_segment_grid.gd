@@ -84,6 +84,13 @@ func getDirectionMapsFromPackedScene(packed_scene: PackedScene) -> Array[Diction
 
 	return return_value
 
+func get_packed_scene_from_tile_id_pair(tile_id_pair: Vector2i) -> PackedScene:
+	var tile_set_source: TileSetScenesCollectionSource = tile_set.get_source(tile_id_pair.x)
+
+	var packed_scene: PackedScene = tile_set_source.get_scene_tile_scene(tile_id_pair.y)
+
+	return packed_scene
+
 func getDirectionMapsFromSegmentTypeAndSegment(segment_type: Enums.TrackSegmentType, segment: int) -> Array[Dictionary]:
 	var tile_set_source: TileSetScenesCollectionSource = tile_set.get_source(segment_type)
 
@@ -104,9 +111,14 @@ func load_tile_type_lookup_table() -> void:
 		for scene_id in range(scene_count):
 			var direction_maps = getDirectionMapsFromSegmentTypeAndSegment(source_id, scene_id)
 
+			var tile_packed_scene: PackedScene = get_packed_scene_from_tile_id_pair(
+				Vector2i(source_id, scene_id)
+			)
+			var tile_resource_path = tile_packed_scene.resource_path
+
 			tile_type_lookup_table[
 				Vector2i(source_id, scene_id)
-			] = TileType.new(source_id, scene_id, direction_maps)
+			] = TileType.new(source_id, scene_id, direction_maps, tile_resource_path)
 
 # func loadTrackSegmentToDirectionMaps() -> void:
 # 	var source_count = tile_set.get_source_count()
@@ -185,8 +197,10 @@ func checkIfTwoSegmentsAreConnectedOrCompatible(direction_maps_1: Array[Dictiona
 	}
 
 func register_segment(location: Vector2i, segment: BaseTrainTrackSegment) -> void:
+	var tile_id_pair: Vector2i = find_tile_id_pair_from_segment(segment)
+
 	tile_instance_lookup_table[location] = TileInstance.new(
-		getDirectionMapsFromSegment(segment),
+		tile_type_lookup_table[tile_id_pair],
 		segment,
 		location
 	)
@@ -215,6 +229,22 @@ func onSegmentRegistration(location: Vector2i, segment: BaseTrainTrackSegment):
 		# print(getAllSegmentsCompatibleWithDirectionMapsInDirection(getDirectionMapsFromSegment(segment), Enums.RelativePosition.NORTH))
 
 	print("Placed Segment %s at position %s" % [segment.name, location])
+
+func find_tile_id_pair_from_segment(segment: BaseTrainTrackSegment) -> Vector2i:
+	var segment_scene_path = segment.scene_file_path
+
+	# print(tile_type_lookup_table)
+
+	for tile_id_pair: Vector2i in tile_type_lookup_table.keys():
+		var tile_type: TileType = tile_type_lookup_table[tile_id_pair]
+		# print("Scene Path is %s and Resource Path is %s" % [segment_scene_path, tile_type.resource_path])
+
+		if tile_type.resource_path == segment_scene_path:
+			print("FOUND!")
+
+			return tile_id_pair
+
+	return Vector2i(-1, -1)
 
 
 func getSegmentsNeighbouringSegmentLocation(location: Vector2i) -> Dictionary[Enums.RelativePosition, TileInstance]:
@@ -251,7 +281,7 @@ func updateExitDirectionsOfSegmentAndNeighbours(location: Vector2i, segment: Bas
 
 		var connected = checkIfTwoSegmentsAreConnectedOrCompatible(
 			getDirectionMapsFromSegment(segment),
-			neighbouring_tile_instance.direction_maps,
+			neighbouring_tile_instance.tile_type.direction_maps,
 			relative_position
 		).connected
 
@@ -323,7 +353,7 @@ func calculateTileEntropy(location: Vector2i) -> Dictionary[String, Variant]:
 			continue
 
 		var valid_segments_for_relative_position = getAllSegmentsCompatibleWithDirectionMapsInDirection(
-			neighbouring_tile_instance.direction_maps,
+			neighbouring_tile_instance.tile_type.direction_maps,
 			RELATIVE_POSITION_TO_OPPOSITE_RELATIVE_POSITION[relative_position]
 		)
 
@@ -358,7 +388,7 @@ func calculateTileEntropy(location: Vector2i) -> Dictionary[String, Variant]:
 	}
 
 func triggerEntropyCalculation(location: Vector2i):
-	print("currently in %s" % location)
+	# print("currently in %s" % location)
 
 	var original_tile_entropy = entropyLookupTable.get(
 		location,
@@ -374,7 +404,7 @@ func triggerEntropyCalculation(location: Vector2i):
 	if new_tile_entropy == original_tile_entropy:
 		return
 
-	print("entropy changed")
+	# print("entropy changed")
 
 	for location_offset in RELATIVE_POSITION_TO_LOCATION_OFFSET.values():
 		triggerEntropyCalculation(location + location_offset)
@@ -399,10 +429,10 @@ func placeSegment(segment_type: Enums.TrackSegmentType, segment: int, segment_po
 	# var segment_scene = self.tile_map_data
 
 
-func _ready() -> void:
+func _init() -> void:
 	load_tile_type_lookup_table()
 
-	await get_tree().create_timer(5).timeout
+	# await get_tree().create_timer(5).timeout
 
 	# print("a")
 	# print(entropyLookupTable.get(Vector2i(0, -1)))
