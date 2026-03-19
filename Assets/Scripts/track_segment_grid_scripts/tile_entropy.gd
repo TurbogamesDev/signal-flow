@@ -7,3 +7,6 @@ var valid_tile_types: Array[TileType]
 func _init(init_location: Vector2i, init_valid_tile_types: Array[TileType]):
     location = init_location
     valid_tile_types = init_valid_tile_types
+
+func is_equal(other_tile_entropy: TileEntropy):
+    return self.valid_tile_types == other_tile_entropy.valid_tile_types

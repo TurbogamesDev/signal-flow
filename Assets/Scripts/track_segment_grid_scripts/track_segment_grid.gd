@@ -4,10 +4,13 @@ class_name TrackSegmentGrid
 # change this to vector2i instead of nested arrays
 # var trackSegmentToDirectionMaps = [] # Array[Array[Dictionary[Enums.TrainDirection, Enums.TrainDirection]]]
 # var segmentInstances: Dictionary[Vector2i, BaseTrainTrackSegment] = {}
-var entropyLookupTable: Dictionary[Vector2i, Dictionary] = {}
+# var entropyLookupTable: Dictionary[Vector2i, Dictionary] = {}
 
 var tile_type_lookup_table: Dictionary[Vector2i, TileType] = {}
 var tile_instance_lookup_table: Dictionary[Vector2i, TileInstance] = {}
+var tile_entropy_lookup_table: Dictionary[Vector2i, TileEntropy] = {}
+
+var default_valid_tile_types: Array[TileType] = [] # performance reasons
 
 const RELATIVE_POSITION_TO_LOCATION_OFFSET: Dictionary[Enums.RelativePosition, Vector2i] = {
 	Enums.RelativePosition.NORTH: Vector2i(0, -1),
@@ -294,57 +297,75 @@ func updateExitDirectionsOfSegmentAndNeighbours(location: Vector2i, segment: Bas
 		makeSegment2TheExitSegmentOfSegment1(neighbouring_tile_instance.segment, segment, RELATIVE_POSITION_TO_OPPOSITE_RELATIVE_POSITION[relative_position])
 
 		
-func getAllSegmentsCompatibleWithDirectionMapsInDirection(direction_maps: Array[Dictionary], relative_position: Enums.RelativePosition) -> Array:
-	var segments_compatible = []
-	
+func get_tile_types_compatible_with_tile_type_in_relative_direction(tile_type: TileType, relative_position: Enums.RelativePosition) -> Array[TileType]:
+	var tile_types_compatible: Array[TileType] = []
+
 	for checking_tile_type_id_pair: Vector2i in tile_type_lookup_table.keys():
 		var checking_tile_type: TileType = tile_type_lookup_table[checking_tile_type_id_pair]
-
-		var checking_direction_maps = checking_tile_type.direction_maps
 		
 		var compatible = checkIfTwoSegmentsAreConnectedOrCompatible(
-			direction_maps,
-			checking_direction_maps, 
+			tile_type.direction_maps,
+			checking_tile_type.direction_maps, 
 			relative_position
 		).compatible
 
 		if not compatible:
 			continue
 
-		segments_compatible.append({
-			"segment_type": checking_tile_type_id_pair.x,
-			"segment": checking_tile_type_id_pair.y
-		})
+		tile_types_compatible.append(checking_tile_type)
+	
+	return tile_types_compatible
 
-	# for checking_segment_type in range(trackSegmentToDirectionMaps.size()):
-	# 	var checking_segments = trackSegmentToDirectionMaps[checking_segment_type]
+# func getAllSegmentsCompatibleWithDirectionMapsInDirection(direction_maps: Array[Dictionary], relative_position: Enums.RelativePosition) -> Array:
+# 	var segments_compatible = []
+	
+# 	for checking_tile_type_id_pair: Vector2i in tile_type_lookup_table.keys():
+# 		var checking_tile_type: TileType = tile_type_lookup_table[checking_tile_type_id_pair]
 
-	# 	for checking_segment in range(checking_segments.size()):
-	# 		# print(checking_segments)
+# 		var checking_direction_maps = checking_tile_type.direction_maps
+		
+# 		var compatible = checkIfTwoSegmentsAreConnectedOrCompatible(
+# 			direction_maps,
+# 			checking_direction_maps, 
+# 			relative_position
+# 		).compatible
 
-	# 		var checking_segment_direction_maps = checking_segments[checking_segment]
+# 		if not compatible:
+# 			continue
 
-	# 		var compatible = checkIfTwoSegmentsAreConnectedOrCompatible(
-	# 			direction_maps,
-	# 			checking_segment_direction_maps, 
-	# 			relative_position
-	# 		).compatible
+# 		segments_compatible.append({
+# 			"segment_type": checking_tile_type_id_pair.x,
+# 			"segment": checking_tile_type_id_pair.y
+# 		})
 
-	# 		if not compatible:
-	# 			continue
+# 	# for checking_segment_type in range(trackSegmentToDirectionMaps.size()):
+# 	# 	var checking_segments = trackSegmentToDirectionMaps[checking_segment_type]
 
-	# 		segments_compatible.append({
-	# 			"segment_type": checking_segment_type,
-	# 			"segment": checking_segment
-	# 		})
+# 	# 	for checking_segment in range(checking_segments.size()):
+# 	# 		# print(checking_segments)
 
-	return segments_compatible
+# 	# 		var checking_segment_direction_maps = checking_segments[checking_segment]
 
-func calculateTileEntropy(location: Vector2i) -> Dictionary[String, Variant]:
+# 	# 		var compatible = checkIfTwoSegmentsAreConnectedOrCompatible(
+# 	# 			direction_maps,
+# 	# 			checking_segment_direction_maps, 
+# 	# 			relative_position
+# 	# 		).compatible
+
+# 	# 		if not compatible:
+# 	# 			continue
+
+# 	# 		segments_compatible.append({
+# 	# 			"segment_type": checking_segment_type,
+# 	# 			"segment": checking_segment
+# 	# 		})
+
+# 	return segments_compatible
+
+func calculateTileEntropy(location: Vector2i) -> TileEntropy:
 	var neighbouring_tile_instances: Dictionary[Enums.RelativePosition, TileInstance] = getSegmentsNeighbouringSegmentLocation(location)
 
-	var valid_segments: Array = []
-	var no_segment_valid = false
+	var valid_tile_types: Array[TileType] = tile_type_lookup_table.values() 
 
 	for relative_position: Enums.RelativePosition in neighbouring_tile_instances:
 		var neighbouring_tile_instance: TileInstance = neighbouring_tile_instances[relative_position]
@@ -352,56 +373,68 @@ func calculateTileEntropy(location: Vector2i) -> Dictionary[String, Variant]:
 		if not neighbouring_tile_instance:
 			continue
 
-		var valid_segments_for_relative_position = getAllSegmentsCompatibleWithDirectionMapsInDirection(
-			neighbouring_tile_instance.tile_type.direction_maps,
+		var valid_tile_types_for_relative_position = get_tile_types_compatible_with_tile_type_in_relative_direction(
+			neighbouring_tile_instance.tile_type,
 			RELATIVE_POSITION_TO_OPPOSITE_RELATIVE_POSITION[relative_position]
 		)
 
-		if valid_segments_for_relative_position == []:
-			no_segment_valid = true
+		# if valid_tile_types_for_relative_position == []:
+		# 	no_segment_valid = true
 
-			break
+		# 	break
 
-		if not valid_segments:
-			valid_segments = valid_segments_for_relative_position
+		# if not valid_segments:
+		# 	valid_segments = valid_segments_for_relative_position
 
-			continue
+		# 	continue
 
-		var new_valid_segments = valid_segments.duplicate_deep()
+		var new_valid_tile_types: Array[TileType] = []
 
-		for valid_segment in valid_segments:
-			if valid_segment in valid_segments_for_relative_position:
+		for valid_tile_type in valid_tile_types:
+			if valid_tile_type not in valid_tile_types_for_relative_position:
 				continue
 
-			new_valid_segments.erase(valid_segment)
+			new_valid_tile_types.append(valid_tile_type)
 
-		valid_segments = new_valid_segments
+		valid_tile_types = new_valid_tile_types
 
-		if not valid_segments:
-			no_segment_valid = true
+		# if not valid_segments:
+		# 	no_segment_valid = true
 
-			break
+		# 	break
 
-	return {
-		"valid_segments": valid_segments,
-		"no_segment_valid": no_segment_valid
-	}
+	return TileEntropy.new(
+		location,
+		valid_tile_types
+	)
 
 func triggerEntropyCalculation(location: Vector2i):
-	# print("currently in %s" % location)
+	print("currently in %s" % location)
 
-	var original_tile_entropy = entropyLookupTable.get(
+	var default_tile_entropy: TileEntropy = TileEntropy.new(
 		location,
-		{
-			"valid_segments": [],
-			"no_segment_valid": false 
-		}
+		default_valid_tile_types
 	)
-	var new_tile_entropy = calculateTileEntropy(location)
 
-	entropyLookupTable[location] = new_tile_entropy
+	var original_tile_entropy: TileEntropy = tile_entropy_lookup_table.get(
+		location,
+		default_tile_entropy
+	)
 
-	if new_tile_entropy == original_tile_entropy:
+	print(default_tile_entropy.location)
+	print(default_tile_entropy.valid_tile_types)
+
+	print(original_tile_entropy.location)
+	print(original_tile_entropy.valid_tile_types)
+
+	var new_tile_entropy: TileEntropy = calculateTileEntropy(location)
+
+	tile_entropy_lookup_table[location] = new_tile_entropy
+
+	if not original_tile_entropy:
+		return
+
+	if new_tile_entropy.is_equal(original_tile_entropy):
 		return
 
 	# print("entropy changed")
@@ -422,6 +455,8 @@ func triggerEntropyCalculation(location: Vector2i):
 
 # 	return segment_1_exit_socket == segment_2_entry_socket
 
+func initialise_default_valid_tile_types() -> void:
+	default_valid_tile_types = tile_type_lookup_table.values()
 
 func placeSegment(segment_type: Enums.TrackSegmentType, segment: int, segment_position: Vector2i) -> void:
 	self.set_cell(segment_position, segment_type, Vector2i(0, 0), segment)
@@ -431,6 +466,8 @@ func placeSegment(segment_type: Enums.TrackSegmentType, segment: int, segment_po
 
 func _init() -> void:
 	load_tile_type_lookup_table()
+
+	initialise_default_valid_tile_types()
 
 	# await get_tree().create_timer(5).timeout
 
