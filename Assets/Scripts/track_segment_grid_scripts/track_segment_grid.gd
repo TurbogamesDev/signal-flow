@@ -338,7 +338,22 @@ func _init() -> void:
 
 	initialise_default_valid_tile_types()
 
-	# await get_tree().create_timer(5).timeout
+func _ready() -> void:
+	await get_tree().create_timer(5).timeout
+
+	print("Maximum tile entropy count is %d." % len(default_valid_tile_types))
+
+	# var sort_entropy: Callable = func(a: TileEntropy, b: TileEntropy) -> bool:
+	# 	return a.get_entropy_count() < b.get_entropy_count()
+
+	# var sorted_tile_entropy_array: Array = tile_entropy_lookup_table.values().duplicate()
+
+	# sorted_tile_entropy_array.sort_custom(sort_entropy)
+
+	for tile_entropy: TileEntropy in tile_entropy_lookup_table.values(): #sorted_tile_entropy_array:
+		var location_string: String = "(%d, %d)" % [tile_entropy.location.x, tile_entropy.location.y]
+
+		print("The tile entropy count of the tile located at %s is %d." % [location_string, tile_entropy.get_entropy_count()])
 
 	# print("a")
 	# print(entropyLookupTable.get(Vector2i(0, -1)))
