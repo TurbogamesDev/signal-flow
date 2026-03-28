@@ -18,5 +18,8 @@ func _init(init_tile_type_id: int, init_tile_id: int, init_direction_maps: Array
 
 	# print(resource_path)
 
+func is_equal(other_tile_type: TileType) -> bool:
+	return (self.tile_type_id == other_tile_type.tile_type_id) and (self.tile_id == other_tile_type.tile_id)
+
 	
 

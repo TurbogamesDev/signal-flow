@@ -7,6 +7,9 @@ var tile_entropy_lookup_table: Dictionary[Vector2i, TileEntropy] = {}
 
 var default_valid_tile_types: Array[TileType] = [] # performance reasons
 
+# var lock: bool = false
+# signal lock_cleared
+
 const RELATIVE_POSITION_TO_LOCATION_OFFSET: Dictionary[Enums.RelativePosition, Vector2i] = {
 	Enums.RelativePosition.NORTH: Vector2i(0, -1),
 	Enums.RelativePosition.SOUTH: Vector2i(0, 1),
@@ -103,9 +106,11 @@ func register_segment(location: Vector2i, segment: BaseTrainTrackSegment) -> voi
 func on_segment_registration(location: Vector2i, tile_instance: TileInstance) -> void:
 	update_exit_direction_of_tile_instance_and_neighbours(tile_instance)
 
-	trigger_entropy_calculation(location)
+	# print("Placing Segment at position %s..." % location)
 
-	# print("Placed Segment %s at position %s" % [segment.name, location])
+	trigger_entropy_calculation(location, true)
+
+	print("Placed Segment at position %s!" % location)
 
 
 
@@ -240,42 +245,92 @@ func check_if_tile_types_compatible_or_connected(tile_type_1: TileType, tile_typ
 	var disconnected: bool = (segment_1_exit_socket == []) or (segment_2_entry_socket == [])
 
 	return (not disconnected) if get_connection_status else compatible
-		
-func get_tile_types_compatible_with_tile_type_in_relative_direction(tile_type: TileType, relative_position: Enums.RelativePosition) -> Array[TileType]:
+
+func get_only_unique_elements_of_array(input_array: Array) -> Array:
+	return input_array
+
+
+	var seen_items: Dictionary[Variant, bool] = {}
+
+	var filter_function: Callable = func(item: Variant) -> bool:
+		if seen_items.has(item):
+			return false
+
+		seen_items[item] = true
+
+		return true
+
+	return input_array.filter(filter_function)
+
+func get_tile_types_compatible_with_location_in_relative_direction(location: Vector2i, relative_position: Enums.RelativePosition) -> Array[TileType]:
 	var tile_types_compatible: Array[TileType] = []
+
+	var tile_instance_for_location: TileInstance = tile_instance_lookup_table.get(location)
+	var tile_entropy_for_location: TileEntropy = tile_entropy_lookup_table.get(location)
+
+	if (not tile_instance_for_location) and (not tile_entropy_for_location):
+		# print("here", location)
+		# print(tile_instance_for_location)
+		# print(tile_entropy_for_location)
+
+		return tile_type_lookup_table.values()
 
 	for checking_tile_type_id_pair: Vector2i in tile_type_lookup_table.keys():
 		var checking_tile_type: TileType = tile_type_lookup_table[checking_tile_type_id_pair]
 		
-		var compatible: bool = check_if_tile_types_compatible_or_connected(
-			tile_type,
-			checking_tile_type, 
-			relative_position,
-			false
-		)
+		var compatible: bool = false
+
+		if tile_instance_for_location:
+			compatible = check_if_tile_types_compatible_or_connected(
+				tile_instance_for_location.tile_type,
+				checking_tile_type, 
+				relative_position,
+				false
+			)
+
+		else:
+			for valid_tile_type: TileType in tile_entropy_for_location.valid_tile_types:
+				var entropy_state_compatible: bool = check_if_tile_types_compatible_or_connected(
+					valid_tile_type,
+					checking_tile_type, 
+					relative_position,
+					false
+				)
+
+				if entropy_state_compatible:
+					compatible = true
 
 		if not compatible:
 			continue
 
 		tile_types_compatible.append(checking_tile_type)
 	
-	return tile_types_compatible
+	# tile_types_compatible.
+
+	return get_only_unique_elements_of_array(tile_types_compatible)
+
+# func check_if_tile_type_in_tile_type_array(checking_tile_type: TileType, tile_type_array: Array[TileType]) -> bool:
+# 	for tile_type: TileType in tile_type_array:
+# 		if not checking_tile_type.is_equal(tile_type):
+# 			continue
+
+# 		return true
+
+# 	return false
 
 func calculate_tile_entropy(location: Vector2i) -> TileEntropy:
-	var neighbouring_tile_instances: Dictionary[Enums.RelativePosition, TileInstance] = get_tile_instances_neighbouring_location(location)
-
 	var valid_tile_types: Array[TileType] = tile_type_lookup_table.values() 
 
-	for relative_position: Enums.RelativePosition in neighbouring_tile_instances:
-		var neighbouring_tile_instance: TileInstance = neighbouring_tile_instances[relative_position]
-
-		if not neighbouring_tile_instance:
-			continue
-
-		var valid_tile_types_for_relative_position: Array[TileType] = get_tile_types_compatible_with_tile_type_in_relative_direction(
-			neighbouring_tile_instance.tile_type,
+	for relative_position: Enums.RelativePosition in Enums.RelativePosition.values():
+		var valid_tile_types_for_relative_position: Array[TileType] = get_tile_types_compatible_with_location_in_relative_direction(
+			location + RELATIVE_POSITION_TO_LOCATION_OFFSET[relative_position],
 			RELATIVE_POSITION_TO_OPPOSITE_RELATIVE_POSITION[relative_position]
 		)
+
+		# if location == Vector2i(0, 2):
+		# 	print(len(valid_tile_types_for_relative_position), relative_position)
+
+		# 	print(tile_instance_lookup_table)
 
 		var new_valid_tile_types: Array[TileType] = []
 
@@ -292,7 +347,65 @@ func calculate_tile_entropy(location: Vector2i) -> TileEntropy:
 		valid_tile_types
 	)
 
-func trigger_entropy_calculation(location: Vector2i) -> void:
+
+# func calculate_tile_entropy_old(location: Vector2i) -> TileEntropy:
+# 	var neighbouring_tile_instances: Dictionary[Enums.RelativePosition, TileInstance] = get_tile_instances_neighbouring_location(location)
+
+# 	var valid_tile_types: Array[TileType] = tile_type_lookup_table.values() 
+
+# 	for relative_position: Enums.RelativePosition in neighbouring_tile_instances:
+# 		var neighbouring_tile_instance: TileInstance = neighbouring_tile_instances[relative_position]
+
+# 		var valid_tile_types_for_relative_position: Array[TileType]
+
+# 		if neighbouring_tile_instance:
+# 			valid_tile_types_for_relative_position = get_tile_types_compatible_with_tile_type_in_relative_direction(
+# 				neighbouring_tile_instance.tile_type,
+# 				RELATIVE_POSITION_TO_OPPOSITE_RELATIVE_POSITION[relative_position]
+# 			)
+
+# 		else:
+# 			continue
+
+# 			var tile_entropy_for_neighbour_location: TileEntropy = tile_entropy_lookup_table.get(
+# 				location + RELATIVE_POSITION_TO_LOCATION_OFFSET[relative_position]
+# 			)
+
+# 			if not tile_entropy_for_neighbour_location:
+# 				continue
+
+# 			for valid_checking_tile_type_for_neighbour_location: TileType in tile_entropy_for_neighbour_location.valid_tile_types:
+# 				var valid_tile_types_for_relative_position_for_checking_tile_type: Array[TileType] = get_tile_types_compatible_with_tile_type_in_relative_direction(
+# 					valid_checking_tile_type_for_neighbour_location,
+# 					RELATIVE_POSITION_TO_OPPOSITE_RELATIVE_POSITION[relative_position]
+# 				)
+
+# 				for valid_tile_type_for_relative_position_for_checking_tile_type: TileType in valid_tile_types_for_relative_position_for_checking_tile_type:
+# 					if check_if_tile_type_in_tile_type_array(valid_tile_type_for_relative_position_for_checking_tile_type, valid_tile_types_for_relative_position):
+# 						continue
+
+# 					valid_tile_types_for_relative_position.append(valid_tile_type_for_relative_position_for_checking_tile_type)
+				
+				
+				
+		
+
+# 		var new_valid_tile_types: Array[TileType] = []
+
+# 		for valid_tile_type: TileType in valid_tile_types:
+# 			if valid_tile_type not in valid_tile_types_for_relative_position:
+# 				continue
+
+# 			new_valid_tile_types.append(valid_tile_type)
+
+# 		valid_tile_types = new_valid_tile_types
+
+# 	return TileEntropy.new(
+# 		location,
+# 		valid_tile_types
+# 	)
+
+func trigger_entropy_calculation(location: Vector2i, first_iteration: bool) -> void:
 	# print("currently in %s" % location)
 
 	var default_tile_entropy: TileEntropy = TileEntropy.new(
@@ -310,10 +423,19 @@ func trigger_entropy_calculation(location: Vector2i) -> void:
 
 	# print(original_tile_entropy.location)
 	# print(original_tile_entropy.valid_tile_types)
-
+	
 	var new_tile_entropy: TileEntropy = calculate_tile_entropy(location)
 
+	if tile_instance_lookup_table.get(location):
+		new_tile_entropy.tile_already_collapsed = true
+
 	tile_entropy_lookup_table[location] = new_tile_entropy
+
+	if first_iteration:
+		for location_offset: Vector2i in RELATIVE_POSITION_TO_LOCATION_OFFSET.values():
+			trigger_entropy_calculation(location + location_offset, false)
+
+		return
 
 	if not original_tile_entropy:
 		return
@@ -324,7 +446,7 @@ func trigger_entropy_calculation(location: Vector2i) -> void:
 	# print("entropy changed")
 
 	for location_offset: Vector2i in RELATIVE_POSITION_TO_LOCATION_OFFSET.values():
-		trigger_entropy_calculation(location + location_offset)
+		trigger_entropy_calculation(location + location_offset, false)
 
 
 
@@ -341,7 +463,7 @@ func _init() -> void:
 func _ready() -> void:
 	await get_tree().create_timer(5).timeout
 
-	print("Maximum tile entropy count is %d." % len(default_valid_tile_types))
+	# print("Maximum tile entropy count is %d." % len(default_valid_tile_types))
 
 	# var sort_entropy: Callable = func(a: TileEntropy, b: TileEntropy) -> bool:
 	# 	return a.get_entropy_count() < b.get_entropy_count()
@@ -356,7 +478,9 @@ func _ready() -> void:
 		print("The tile entropy count of the tile located at %s is %d." % [location_string, tile_entropy.get_entropy_count()])
 
 	# print("a")
-	# print(entropyLookupTable.get(Vector2i(0, -1)))
+	
+	# for tile_type in tile_entropy_lookup_table.get(Vector2i(0, 2)).valid_tile_types:
+	# 	print(tile_type.tile_type_id, tile_type.tile_id) 
 	# print(entropyLookupTable)
 	# print(trackSegmentToDirectionMap)
 
