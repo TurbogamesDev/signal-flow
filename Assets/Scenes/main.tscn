@@ -9,4 +9,4 @@
 zoomFactor = 1.1
 
 [node name="TrackSegmentGrid" parent="." unique_id=2026210649 instance=ExtResource("2_qplxx")]
-tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 3, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 3, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, 254, 255, 0, 0, 3, 0, 0, 0, 0, 0, 8, 0, 2, 0, 0, 0, 3, 0, 0, 0, 0, 0, 8, 0)

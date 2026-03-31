@@ -43,6 +43,18 @@ const RELATIVE_POSITION_TO_OPPOSITE_RELATIVE_POSITION: Dictionary[Enums.Relative
 	Enums.RelativePosition.WEST: Enums.RelativePosition.EAST
 }
 
+const TERMINATING_STATION_TILE_ID_PAIRS: Array[Vector2i] = [
+	Vector2i(Enums.TrackSegmentType.STATION_TRACK_SEGMENT, Enums.StationTrackSegment.EAST_ENTRY_TERMINATING),
+	Vector2i(Enums.TrackSegmentType.STATION_TRACK_SEGMENT, Enums.StationTrackSegment.WEST_ENTRY_TERMINATING),
+	Vector2i(Enums.TrackSegmentType.STATION_TRACK_SEGMENT, Enums.StationTrackSegment.NORTH_ENTRY_TERMINATING),
+	Vector2i(Enums.TrackSegmentType.STATION_TRACK_SEGMENT, Enums.StationTrackSegment.SOUTH_ENTRY_TERMINATING)
+]
+
+const DOUBLE_CROSSOVER_SWITCHING_TILE_ID_PAIRS: Array[Vector2i] = [
+	Vector2i(Enums.TrackSegmentType.SWITCHING_TRACK_SEGMENT, Enums.SwitchingTrackSegment.HORIZONTAL_DOUBLE_CROSSOVER),
+	Vector2i(Enums.TrackSegmentType.SWITCHING_TRACK_SEGMENT, Enums.SwitchingTrackSegment.VERTICAL_DOUBLE_CROSSOVER)
+]
+
 
 func get_direction_maps_from_segment(segment: BaseTrainTrackSegment) -> Array[Dictionary]:
 	var return_value: Array[Dictionary] = []
@@ -246,21 +258,21 @@ func check_if_tile_types_compatible_or_connected(tile_type_1: TileType, tile_typ
 
 	return (not disconnected) if get_connection_status else compatible
 
-func get_only_unique_elements_of_array(input_array: Array) -> Array:
-	return input_array
+# func get_only_unique_elements_of_array(input_array: Array) -> Array:
+# 	return input_array
 
 
-	var seen_items: Dictionary[Variant, bool] = {}
+# 	var seen_items: Dictionary[Variant, bool] = {}
 
-	var filter_function: Callable = func(item: Variant) -> bool:
-		if seen_items.has(item):
-			return false
+# 	var filter_function: Callable = func(item: Variant) -> bool:
+# 		if seen_items.has(item):
+# 			return false
 
-		seen_items[item] = true
+# 		seen_items[item] = true
 
-		return true
+# 		return true
 
-	return input_array.filter(filter_function)
+# 	return input_array.filter(filter_function)
 
 func get_tile_types_compatible_with_location_in_relative_direction(location: Vector2i, relative_position: Enums.RelativePosition) -> Array[TileType]:
 	var tile_types_compatible: Array[TileType] = []
@@ -275,7 +287,23 @@ func get_tile_types_compatible_with_location_in_relative_direction(location: Vec
 
 		return tile_type_lookup_table.values()
 
+	var tile_is_double_crossover: bool = false
+
+	var tile_type_id_pair_for_location: Vector2i
+
+	if tile_instance_for_location:
+		tile_type_id_pair_for_location = Vector2i(
+			tile_instance_for_location.tile_type.tile_type_id,
+			tile_instance_for_location.tile_type.tile_id
+		)
+
+	if tile_type_id_pair_for_location in DOUBLE_CROSSOVER_SWITCHING_TILE_ID_PAIRS:
+		tile_is_double_crossover = true
+
 	for checking_tile_type_id_pair: Vector2i in tile_type_lookup_table.keys():
+		if tile_is_double_crossover and (checking_tile_type_id_pair not in TERMINATING_STATION_TILE_ID_PAIRS):
+			continue
+
 		var checking_tile_type: TileType = tile_type_lookup_table[checking_tile_type_id_pair]
 		
 		var compatible: bool = false
@@ -307,7 +335,7 @@ func get_tile_types_compatible_with_location_in_relative_direction(location: Vec
 	
 	# tile_types_compatible.
 
-	return get_only_unique_elements_of_array(tile_types_compatible)
+	return tile_types_compatible
 
 # func check_if_tile_type_in_tile_type_array(checking_tile_type: TileType, tile_type_array: Array[TileType]) -> bool:
 # 	for tile_type: TileType in tile_type_array:
@@ -320,6 +348,8 @@ func get_tile_types_compatible_with_location_in_relative_direction(location: Vec
 
 func calculate_tile_entropy(location: Vector2i) -> TileEntropy:
 	var valid_tile_types: Array[TileType] = tile_type_lookup_table.values() 
+
+	# var double_crossover_in_neighbouring_tiles = false
 
 	for relative_position: Enums.RelativePosition in Enums.RelativePosition.values():
 		var valid_tile_types_for_relative_position: Array[TileType] = get_tile_types_compatible_with_location_in_relative_direction(
@@ -341,6 +371,8 @@ func calculate_tile_entropy(location: Vector2i) -> TileEntropy:
 			new_valid_tile_types.append(valid_tile_type)
 
 		valid_tile_types = new_valid_tile_types
+
+
 
 	return TileEntropy.new(
 		location,
